@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="http://jelix.org/ns/module/1.0">
+    <info id="wsexport@yourwebsite.undefined" name="wsexport" createdate="2011-12-17">
+        <version date="2011-12-17">0.1pre</version>
+        <label lang="en_EN">wsexport</label>
+        <description lang="en_EN" />
+        <license URL="http://www.gnu.org/licenses/gpl.html">GNU General Public Licence</license>
+        <copyright>2011 Thomas Pellissier Tanon</copyright>
+        <creator name="Thomas Pellissier Tanon" email="thomaspt@hotmail.fr" active="true" />
+        <!--<contributor name="hisname" email="hisemail@yoursite.undefined" active="true" since="" role=""/>-->
+        <homepageURL>http://www.yourwebsite.undefined</homepageURL>
+    </info>
+    <dependencies>
+        <jelix minversion="1.3" maxversion="1.3.*"/>
+    </dependencies>
+</module>
