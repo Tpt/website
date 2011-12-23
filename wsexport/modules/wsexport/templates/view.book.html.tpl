@@ -1,6 +1,6 @@
 <article class="block" itemscope="itemscope" itemtype="http://schema.org/Book">
-	<h1 itemprop="name">{$book->name}</h1>
-        {if $book->author}<h2>{@wsexport.by@} <span itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person"><a itemprop="url" href="{jurl 'book:index', array('lang' => $book->lang, 'author' => $book->author)}">{$book->author}</a></span></h2>{/if}
+	<h1 itemprop="name">{$book->name|eschtml}</h1>
+        {if $book->author}<h2>{@wsexport.by@} <span itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person"><a itemprop="url" href="{jurl 'book:index', array('lang' => $book->lang, 'author' => $book->author)}">{$book->author|eschtml}</a></span></h2>{/if}
 <div class="blockcontent">
 <div id="picture"></div>
 <table id="info">
@@ -12,25 +12,25 @@
 	{if $book->year}
 	<tr>
 		<th>{@wsexport.published_in@}</th>
-		<td>{if is_numeric($book->year)}<time itemprop="datePublished" datetime="{$book->year}">{$book->year}</time>{else}{$book->year}{/if} {if $book->place}{@wsexport.in@} {$book->place}{/if}</td>
+		<td>{if is_numeric($book->year)}<time itemprop="datePublished" datetime="{$book->year}">{$book->year}</time>{else}{$book->year|eschtml}{/if} {if $book->place}{@wsexport.in@} {$book->place|eschtml}{/if}</td>
 	</tr>
 	{/if}
         {if count($book->categories) != 0}
 	<tr>
 		<th>{@wsexport.categories@}</th>
-		<td>{foreach $book->categories as $categorie}{$categorie}, {/foreach}</td>
+		<td>{foreach $book->categories as $categorie}{$categorie|eschtml}, {/foreach}</td>
 	</tr>
 	{/if}
 	{if $book->translator}
 	<tr>
 		<th>{@wsexport.translator@}</th>
-		<td itemprop="translator" itemscope="itemscope" itemtype="http://schema.org/Person"><a itemprop="url" href="{jurl 'book:index', array('lang' => $book->lang, 'translator' => $book->translator)}">{$book->translator}</a></td>
+		<td itemprop="translator" itemscope="itemscope" itemtype="http://schema.org/Person"><a itemprop="url" href="{jurl 'book:index', array('lang' => $book->lang, 'translator' => $book->translator)}">{$book->translator|eschtml}</a></td>
 	</tr>
 	{/if}
 	{if $book->illustrator}
 	<tr>
 		<th>{@wsexport.illustrator@}</th>
-		<td itemprop="illustrator" itemscope="itemscope" itemtype="http://schema.org/Person"><a itemprop="url" href="{jurl 'book:index', array('lang' => $book->lang, 'illustrator' => $book->illustrator)}">{$book->illustrator}</a></td>
+		<td itemprop="illustrator" itemscope="itemscope" itemtype="http://schema.org/Person"><a itemprop="url" href="{jurl 'book:index', array('lang' => $book->lang, 'illustrator' => $book->illustrator)}">{$book->illustrator|eschtml}</a></td>
 	</tr>
 	{/if}
 </table>

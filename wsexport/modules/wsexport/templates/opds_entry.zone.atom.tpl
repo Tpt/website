@@ -6,21 +6,23 @@
 {/if}
         <id xsi:type="dcterms:URI">{jurl "book:view", array('lang' => $book->lang, 'title' => $book->title)}</id>
         <title>{$book->name|escxml}</title>
-{if $book->author}
+        {if $book->author}
         <author>
                 <name>{$book->author|escxml}</name>
                 <uri>{jurl 'book:index', array('author' => $book->author)}</uri>
         </author>
-{/if}
+        {/if}
         <published>{$book->created|jdatetime:'db_date':'iso8601'}</published>
         <updated>{$book->updated|jdatetime:'db_date':'iso8601'}</updated>
         <rights>CC-BY-SA 3.0 or GNU FDL</rights>
         <summary>{$book->name|escxml}</summary>
         <dc:identifier xsi:type="dcterms:URI">urn:uuid:{$book->uuid|escxml}</dc:identifier>
         <dc:language xsi:type="dcterms:RFC4646">{$book->lang|escxml}</dc:language>
-        <dc:publisher>Wikisource</dc:publisher>
         <dc:source xsi:type="dcterms:URI">http://{$book->lang|escurl}.wikisource.org/wiki/{$book->title|escurl}</dc:source>
         {if $book->year}<dcterms:issued {if is_numeric($book->year)} xsi:type="dcterms:W3CDTF"{/if} >{$book->year|escxml}</dcterms:issued>{/if}
+        {if $book->publisher}<dc:publisher>{$book->publisher}</dc:publisher>{/if}
+        {if $book->translator}<dc:contributor>{$book->translator}</dc:contributor>{/if}
+        {if $book->illustrator}<dc:contributor>{$book->illustrator}</dc:contributor>{/if}
         {foreach $book->categories as $categorie}
         <category label="{$categorie|escxml}" term="{$categorie|escxml}" />
         {/foreach}

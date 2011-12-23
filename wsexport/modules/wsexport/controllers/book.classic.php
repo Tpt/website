@@ -82,6 +82,9 @@ class bookCtrl extends myController {
                         case '':
                                 $rep = $this->getResponse('html');
                                 $rep->addLink(jUrl::get('book:index', array_merge($this->request->params, array('format' => 'atom'))), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=acquisition', jLocale::get('wsexport.opds_catalog'));
+                                $rep->addHeadContent('<meta name="totalResults" content="' . $count . '" />');
+                                $rep->addHeadContent('<meta name="startIndex" content="' . $offset . '" />');
+                                $rep->addHeadContent('<meta name="itemsPerPage" content="' . $itemPerPage . '" />');
 		                $rep->title = ''; //TODO
                                 $tpl = new jTpl();
                                 $tpl->assign('books', $books);
@@ -203,7 +206,7 @@ class bookCtrl extends myController {
 			        $rep->addItem($rep->createItem('application/opensearchdescription+xml', jUrl::getFull('#', array('format' => 'opensearchdescription'), jUrl::XMLSTRING), 'self'));
 			        $rep->addItem($rep->createItem('application/x-suggestions+json', jUrl::getFull('#', array('format' => 'opensearchsuggestions', 'lang' => '{language}', 'q' => '{searchTerms}', 'limit' => '{count?}', 'offset' => '{startIndex?}'), jUrl::XMLSTRING), 'suggestions'));
 			        $rep->addItem($rep->createItem('application/atom+xml', jUrl::getFull('#', array('format' => 'atom', 'lang' => '{language}', 'q' => '{searchTerms}', 'limit' => '{count?}', 'offset' => '{startIndex?}'), jUrl::XMLSTRING), 'results'));
-			        $rep->addItem($rep->createItem('application/text/html', jUrl::getFull('#', array('q' => '{searchTerms}', 'lang' => '{language}', 'limit' => '{count?}', 'offset' => '{startIndex?}'), jUrl::XMLSTRING), 'results'));
+			        $rep->addItem($rep->createItem('application/xhtml+xml', jUrl::getFull('#', array('q' => '{searchTerms}', 'lang' => '{language}', 'limit' => '{count?}', 'offset' => '{startIndex?}'), jUrl::XMLSTRING), 'results'));
                                 break;
 		        case 'opensearchsuggestions':
 			        $rep = $this->getResponse('opensearchsuggestions');
@@ -230,6 +233,9 @@ class bookCtrl extends myController {
                         case '':
                                 $rep = $this->getResponse('html');
                                 $rep->addLink(jUrl::get('book:index', array_merge($this->request->params, array('format' => 'atom'))), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=acquisition', jLocale::get('wsexport.opds_catalog'));
+                                $rep->addHeadContent('<meta name="totalResults" content="' . $count . '" />');
+                                $rep->addHeadContent('<meta name="startIndex" content"' . $offset . '" />');
+                                $rep->addHeadContent('<meta name="itemsPerPage" content="' . $itemPerPage . '" />');
 		                $rep->title = ''; //TODO
                                 $tpl = new jTpl();
                                 $tpl->assign('books', $books);

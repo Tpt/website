@@ -6,7 +6,7 @@ He provide also an OPDS catalog.
 
 Installation
 ============
-You have to download files and use it with jelix 1.3, that is downloadable <a href="http://jelix.org/articles/fr/telechargement/stable/1.3">here</a>. You put lib file in the main directory, you create temp/wsexport and you set it writable by the application. You need also a sql database you create with the database.sql file. The configuation of the database is here : wsexport/var/config/profiles.ini.php
+You have to download files and use it with jelix 1.3, that is downloadable <a href="http://jelix.org/articles/fr/telechargement/stable/1.3">here</a>. You put lib file in the main directory, you create temp/wsexport and you set it writable by the application. You need also a sql database you create with the wsexport/modules/wsexport/install/sql/install.sql file. You can also use the install command of Jelix. The configuation of the database is here : wsexport/var/config/profiles.ini.php
 
 Composition
 ===========
