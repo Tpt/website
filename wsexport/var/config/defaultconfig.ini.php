@@ -54,7 +54,7 @@ opensearchdescription=jResponseOpenSearchDescription
 opensearchsuggestions=jResponseOpenSearchSuggestions
 
 [jResponseHtml]
-plugins = debugbar
+plugins = debugbar,dublincore
  
 [logger]
 default=file,memory

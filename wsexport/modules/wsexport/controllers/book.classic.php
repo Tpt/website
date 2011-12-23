@@ -82,6 +82,7 @@ class bookCtrl extends myController {
                         case '':
                                 $rep = $this->getResponse('html');
                                 $rep->addLink(jUrl::get('book:index', array_merge($this->request->params, array('format' => 'atom'))), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=acquisition', jLocale::get('wsexport.opds_catalog'));
+                                $rep->addHeadProfile('http://a9.com/-/spec/opensearch/1.1/');
                                 $rep->addHeadContent('<meta name="totalResults" content="' . $count . '" />');
                                 $rep->addHeadContent('<meta name="startIndex" content="' . $offset . '" />');
                                 $rep->addHeadContent('<meta name="itemsPerPage" content="' . $itemPerPage . '" />');
@@ -123,6 +124,24 @@ class bookCtrl extends myController {
                                 $rep = $this->getResponse('html');
                                 $rep->addLink(jUrl::get('default:index', array('lang' => $this->lang, 'title' => $title, 'format' => 'atom')), 'alternate', 'application/atom+xml;type=entry;profile=opds-catalog', jLocale::get('wsexport.opds_catalog'));
 		                $rep->title = $book->name;
+
+                                $dublincore = $rep->getPlugin('dublincore');
+                                $dublincore->addMeta('DC.identifier', 'urn:uuid:' . $book->uuid);
+                                $dublincore->addMeta('DC.identifier', 'http://' . $book->lang . '.wikisource.org/wiki/' . $book->title, 'DCTERMS.URI');
+                                $dublincore->addMeta('DC.language', $book->lang);
+                                $dublincore->addMeta('DC.title', $book->name);
+                                $dublincore->addMeta('DC.creator', $book->author);
+                                $dublincore->addMeta('DC.publisher', $book->publisher);
+                                $dublincore->addLink('DC.source', 'http://' . $book->lang . '.wikisource.org/wiki/' . $book->title);
+                                $dublincore->addLink('DC.rights', 'http://creativecommons.org/licenses/by-sa/3.0/', 'en');
+                                $dublincore->addLink('DC.rights', 'http://www.gnu.org/copyleft/fdl.html', 'en');
+                                $dublincore->addMeta('DC.format', 'application/xhtml+xml', 'DCTERMS.IMT');
+                                $dublincore->addMeta('DC.type', 'Text', 'DCTERMS.DCMIType');
+
+                                $rep->addHeadProfile('http://microformats.org/profile/rel-license');
+                                $rep->addLink('http://creativecommons.org/licenses/by-sa/3.0/', 'licence', null, 'CC BY-SA 3.0');
+                                $rep->addLink('http://www.gnu.org/copyleft/fdl.html', 'licence', null, 'GNU FDL');
+
                                 $tpl = new jTpl();
 		                $tpl->assign('book', $book);
         		        $rep->body->assign('MAIN', $tpl->fetch('view.book.html'));
@@ -189,16 +208,16 @@ class bookCtrl extends myController {
                 switch($this->format) {
 		        case 'opensearchdescription':
 			        $rep = $this->getResponse('opensearchdescription');
-			        $rep->infos->shortName = '';
-			        $rep->infos->description = '';
+			        $rep->infos->shortName = jLocale::get('wsexport.site.short_name');
+			        $rep->infos->description = jLocale::get('wsexport.site.description');
 			        $rep->infos->tags = '';
 			        $rep->infos->contact = '';
-			        $rep->infos->longName = '';
+			        $rep->infos->longName = jLocale::get('wsexport.site.long_name');
 			        $rep->infos->imageType = '';
 			        $rep->infos->imageLink = '';
 			        $rep->infos->iconType = '';
 			        $rep->infos->iconLink = '';
-			        $rep->infos->exemple = '';
+			        $rep->infos->exemple = 'Declaration';
 			        $rep->infos->developer = '';
 			        $rep->infos->attribution = '';
 			        $rep->infos->syndicationRight = 'open';
@@ -210,6 +229,7 @@ class bookCtrl extends myController {
                                 break;
 		        case 'opensearchsuggestions':
 			        $rep = $this->getResponse('opensearchsuggestions');
+                                $rep->query = $query;
 			        foreach($books as $book) {
 				        $rep->addItem($book->name, $book->name, jUrl::getFull('book:view', array('lang' => $book->lang, 'title' => $book->title)));
 			        }
@@ -224,6 +244,7 @@ class bookCtrl extends myController {
                                 $rep->content->assign('count', $count);
                                 $rep->content->assign('offset', $offset);
                                 $rep->content->assign('itemPerPage', $itemPerPage);
+                                $rep->content->assign('query', $query);
                                 $dt = new jDateTime();
                                 $dt->now();
                                 $now = $dt->toString(jDateTime::ISO8601_FORMAT);
@@ -233,8 +254,9 @@ class bookCtrl extends myController {
                         case '':
                                 $rep = $this->getResponse('html');
                                 $rep->addLink(jUrl::get('book:index', array_merge($this->request->params, array('format' => 'atom'))), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=acquisition', jLocale::get('wsexport.opds_catalog'));
+                                $rep->addHeadProfile('http://a9.com/-/spec/opensearch/1.1/');
                                 $rep->addHeadContent('<meta name="totalResults" content="' . $count . '" />');
-                                $rep->addHeadContent('<meta name="startIndex" content"' . $offset . '" />');
+                                $rep->addHeadContent('<meta name="startIndex" content="' . $offset . '" />');
                                 $rep->addHeadContent('<meta name="itemsPerPage" content="' . $itemPerPage . '" />');
 		                $rep->title = ''; //TODO
                                 $tpl = new jTpl();

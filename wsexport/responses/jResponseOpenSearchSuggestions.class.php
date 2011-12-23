@@ -23,12 +23,12 @@ final class jResponseOpenSearchSuggestions extends jResponse {
      * the searched term
      * @var string
      */
-    public $query;
+    public $query = '';
 
     /**
     * array of suggestions
     */
-    public $itemList = array();
+    protected $itemList = array();
 
 
     public function output() {

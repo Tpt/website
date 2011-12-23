@@ -26,6 +26,11 @@ class jResponseHtml5 extends jResponseHtml {
      */
     protected $_fixeOldIE = '//html5shiv.googlecode.com/svn/trunk/html5.js';
 
+    /**
+     * property rofile of the head element.
+     */
+    protected $_headProfile = '';
+
     function __construct (){
         parent::__construct();
         global $gJConfig;
@@ -34,17 +39,25 @@ class jResponseHtml5 extends jResponseHtml {
     }
 
     /**
+     * add a profile to the head element.
+     * @param string $profile the profile
+     */
+    public function addHeadProfile ($profile){
+        $this->_headProfile .= htmlspecialchars($profile) . ' ';
+    }
+
+    /**
      * generate the doctype. You can override it if you want to have your own doctype, like XHTML+MATHML.
      */
     protected function outputDoctype (){
     	
         if($this->_isXhtml && $this->xhtmlContentType && strstr($_SERVER['HTTP_ACCEPT'],'application/xhtml+xml')){
-            echo '<?xml version="1.0" encoding="'.$this->_charset.'"?>';
-            echo '<!DOCTYPE html>';
-            echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="',$this->_lang,'" lang="',$this->_lang,'">';
+            echo '<?xml version="1.0" encoding="'.$this->_charset.'"?>', "\n";
+            echo '<!DOCTYPE html>', "\n";
+            echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="',$this->_lang,'" lang="',$this->_lang,'">', "\n";
         }else{
             echo '<!DOCTYPE html>', "\n";
-            echo '<html lang="',$this->_lang,'">';
+            echo '<html lang="',$this->_lang,'">', "\n";
         }
     }
 
@@ -54,18 +67,22 @@ class jResponseHtml5 extends jResponseHtml {
     protected function outputHtmlHeader (){
         global $gJConfig;
 
-        echo '<head>'."\n";
-        if($this->_isXhtml && $this->xhtmlContentType && strstr($_SERVER['HTTP_ACCEPT'],'application/xhtml+xml')){      
-            echo '<meta content="application/xhtml+xml; charset='.$this->_charset.'" http-equiv="content-type"'.$this->_endTag;
+        if($this->_headProfile != '') {
+            echo '<head profile="',$this->_headProfile,'">',"\n";
         } else {
-            echo '<meta content="text/html; charset='.$this->_charset.'" http-equiv="content-type"'.$this->_endTag;
+            echo '<head>',"\n";
         }
-        echo '<title>'.htmlspecialchars($this->title)."</title>\n";
+        if($this->_isXhtml && $this->xhtmlContentType && strstr($_SERVER['HTTP_ACCEPT'],'application/xhtml+xml')){      
+            echo '<meta content="application/xhtml+xml;charset=',$this->_charset,'" http-equiv="content-type"',$this->_endTag;
+        } else {
+            echo '<meta content="text/html;charset=',$this->_charset,'" http-equiv="content-type"',$this->_endTag;
+        }
+        echo '<title>',htmlspecialchars($this->title),"</title>\n";
 
         if(!empty($this->_MetaDescription)){
             // meta description
             $description = implode(' ',$this->_MetaDescription);
-            echo '<meta name="description" content="'.htmlspecialchars($description).'" '.$this->_endTag;
+            echo '<meta name="description" content="',htmlspecialchars($description).'" ',$this->_endTag;
         }
 
         if(!empty($this->_MetaKeywords)){

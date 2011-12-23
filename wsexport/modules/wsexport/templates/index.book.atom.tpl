@@ -13,7 +13,9 @@
         <link type="application/atom+xml;profile=opds-catalog;kind=navigation" rel="up" title="{@wsexport.mainpage@}" href="{jurl '', array('lang' => $lang, 'format' => 'atom')}" />
         <link type="application/opensearchdescription+xml" rel="search" title="{@wsexport.search@}" href="{jurl 'book:search', array('format' => 'opensearchdescription')}" />
         <opensearch:totalResults>{$count}</opensearch:totalResults>
+        <opensearch:startIndex>{$offset}</opensearch:startIndex>
         <opensearch:itemsPerPage>{$itemPerPage}</opensearch:itemsPerPage>
+        {if isset($query)}<opensearch:Query role="request" searchTerms="{$query}" />{/if}
         {if $offset + $itemPerPage < $count}
                 <link type="application/atom+xml;profile=opds-catalog;kind=acquisition" rel="next" title="{@wsexport.pagelinks.next@}" href="{jurl '#', array_merge($params, array('offset' => $offset + $itemPerPage))}" />
         {/if}
