@@ -82,7 +82,7 @@ class bookCtrl extends myController {
                         case '':
                                 $rep = $this->getResponse('html');
                                 $rep->addLink(jUrl::get('book:index', array_merge($this->request->params, array('format' => 'atom'))), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=acquisition', jLocale::get('wsexport.opds_catalog'));
-                                $rep->addHeadProfile('http://a9.com/-/spec/opensearch/1.1/');
+                                $rep->headTagAttributes['profile'] .= ' http://a9.com/-/spec/opensearch/1.1/';
                                 $rep->addHeadContent('<meta name="totalResults" content="' . $count . '" />');
                                 $rep->addHeadContent('<meta name="startIndex" content="' . $offset . '" />');
                                 $rep->addHeadContent('<meta name="itemsPerPage" content="' . $itemPerPage . '" />');
@@ -138,7 +138,18 @@ class bookCtrl extends myController {
                                 $dublincore->addMeta('DC.format', 'application/xhtml+xml', 'DCTERMS.IMT');
                                 $dublincore->addMeta('DC.type', 'Text', 'DCTERMS.DCMIType');
 
-                                $rep->addHeadProfile('http://microformats.org/profile/rel-license');
+                                $rep->htmlTagAttributes['prefix'] = 'og: http://ogp.me/ns#';
+                                $rep->headTagAttributes['prefix'] = 'book: http://ogp.me/ns/book#';
+                                $rep->addHeadContent('<meta property="og:title" content="' . $book->name . '" />');
+                                $rep->addHeadContent('<meta property="og:type" content="book" />');
+                                $rep->addHeadContent('<meta property="og:url" content="' . jUrl::getFull('book:view', array('lang' => $book->lang, 'title' => $book->title), jUrl::XMLSTRING) . '" />');
+                                //$rep->addHeadContent('<meta property="og:image" content="" />');
+                                //$rep->addHeadContent('<meta property="og:locale" content="' . '' . '" />'); TODO
+                                $rep->addHeadContent('<meta property="og:site_name" content="' . jLocale::get('wsexport.site.short_name') . '" />');
+                                $rep->addHeadContent('<meta property="book:author" content="' . $book->author . '" />');
+                                $rep->addHeadContent('<meta property="book:release_date" content="' . $book->year . '" />');
+
+                                $rep->headTagAttributes['profile'] .= ' http://microformats.org/profile/rel-license';
                                 $rep->addLink('http://creativecommons.org/licenses/by-sa/3.0/', 'licence', null, 'CC BY-SA 3.0');
                                 $rep->addLink('http://www.gnu.org/copyleft/fdl.html', 'licence', null, 'GNU FDL');
 
@@ -254,7 +265,7 @@ class bookCtrl extends myController {
                         case '':
                                 $rep = $this->getResponse('html');
                                 $rep->addLink(jUrl::get('book:index', array_merge($this->request->params, array('format' => 'atom'))), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=acquisition', jLocale::get('wsexport.opds_catalog'));
-                                $rep->addHeadProfile('http://a9.com/-/spec/opensearch/1.1/');
+                                $rep->headTagAttributes['profile'] .= ' http://a9.com/-/spec/opensearch/1.1/';
                                 $rep->addHeadContent('<meta name="totalResults" content="' . $count . '" />');
                                 $rep->addHeadContent('<meta name="startIndex" content="' . $offset . '" />');
                                 $rep->addHeadContent('<meta name="itemsPerPage" content="' . $itemPerPage . '" />');

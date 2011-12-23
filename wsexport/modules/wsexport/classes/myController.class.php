@@ -23,7 +23,7 @@ class myController extends jController {
                 $this->format = strtolower($this->param('format'));
         }
 
-        function _error($id) {
+        protected function _error($id) {
                 if($id = 404) {
                         $rep = $this->getResponse('redirect');
 		        $rep->action = 'jelix~error:notfound';

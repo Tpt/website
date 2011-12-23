@@ -18,6 +18,11 @@ class htmlResponse extends jResponseHtml5 {
 
 	public $xhtmlContentType = true;
 
+        function __construct() {
+                parent::__construct();
+                $this->headTagAttributes['profile'] = '';
+        }
+
 	protected function doAfterActions() {
 		if($this->noRobots) {
 			$this->addHeadContent('<meta name="robots" content="noindex,nofollow" />');

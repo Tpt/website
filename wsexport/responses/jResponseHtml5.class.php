@@ -27,23 +27,24 @@ class jResponseHtml5 extends jResponseHtml {
     protected $_fixeOldIE = '//html5shiv.googlecode.com/svn/trunk/html5.js';
 
     /**
-     * property rofile of the head element.
+     * html attributes
+     * This attributes are written on the html tag
+     * @var array
      */
-    protected $_headProfile = '';
+    public $htmlTagAttributes = array();
+
+    /**
+     * head attributes
+     * This attributes are written on the head tag
+     * @var array
+     */
+    public $headTagAttributes = array();
 
     function __construct (){
         parent::__construct();
         global $gJConfig;
         $lang = split('_', $gJConfig->locale);
         $this->_lang = $lang[0];
-    }
-
-    /**
-     * add a profile to the head element.
-     * @param string $profile the profile
-     */
-    public function addHeadProfile ($profile){
-        $this->_headProfile .= htmlspecialchars($profile) . ' ';
     }
 
     /**
@@ -54,10 +55,18 @@ class jResponseHtml5 extends jResponseHtml {
         if($this->_isXhtml && $this->xhtmlContentType && strstr($_SERVER['HTTP_ACCEPT'],'application/xhtml+xml')){
             echo '<?xml version="1.0" encoding="'.$this->_charset.'"?>', "\n";
             echo '<!DOCTYPE html>', "\n";
-            echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="',$this->_lang,'" lang="',$this->_lang,'">', "\n";
+            echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="',$this->_lang,'" lang="',$this->_lang,'" ';
+            foreach($this->htmlTagAttributes as $attr=>$value){
+                echo $attr,'="', htmlspecialchars($value),'" ';
+            }
+            echo ">\n";
         }else{
             echo '<!DOCTYPE html>', "\n";
-            echo '<html lang="',$this->_lang,'">', "\n";
+            echo '<html lang="',$this->_lang,'" ';
+            foreach($this->htmlTagAttributes as $attr=>$value){
+                echo $attr,'="', htmlspecialchars($value),'" ';
+            }
+            echo ">\n";
         }
     }
 
@@ -67,11 +76,11 @@ class jResponseHtml5 extends jResponseHtml {
     protected function outputHtmlHeader (){
         global $gJConfig;
 
-        if($this->_headProfile != '') {
-            echo '<head profile="',$this->_headProfile,'">',"\n";
-        } else {
-            echo '<head>',"\n";
+        echo '<head ';
+        foreach($this->headTagAttributes as $attr=>$value){
+            echo $attr,'="', htmlspecialchars($value),'" ';
         }
+        echo ">\n";
         if($this->_isXhtml && $this->xhtmlContentType && strstr($_SERVER['HTTP_ACCEPT'],'application/xhtml+xml')){      
             echo '<meta content="application/xhtml+xml;charset=',$this->_charset,'" http-equiv="content-type"',$this->_endTag;
         } else {

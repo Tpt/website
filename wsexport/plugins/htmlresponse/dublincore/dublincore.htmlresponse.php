@@ -37,9 +37,10 @@ class dublincoreHTMLResponsePlugin implements jIHTMLResponsePlugin {
     public function beforeOutput() {
         if(empty($this->meta) && empty($this->link))
             return;
-
-        if(method_exists($this->response, 'addHeadProfile'))
-            $this->response->addHeadProfile('http://dublincore.org/documents/dcq-html/');
+        if(array_key_exists('profile', $this->response->headTagAttributes))
+            $this->response->headTagAttributes['profile'] .= ' http://dublincore.org/documents/dcq-html/';
+        else
+            $this->response->headTagAttributes['profile'] = 'http://dublincore.org/documents/dcq-html/';
         $this->response->addHeadContent('<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />');
         $this->response->addHeadContent('<link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" />');
 
