@@ -1,0 +1,3 @@
+[submodule "wsexport/modules/wsexport/classes/wikisource-export"]
+	path = wsexport/modules/wsexport/classes/wikisource-export
+	url = git://github.com/Tpt/wikisource-export.git
