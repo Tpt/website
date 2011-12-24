@@ -29,6 +29,7 @@ class defaultCtrl extends myController {
                         case 'html':
                         case '':
                                 $rep = $this->getResponse('html');
+                                $rep->action = 'home';
                                 $rep->addLink(jUrl::get('default:index', array('lang' => $this->lang, 'format' => 'atom')), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=navigation', jLocale::get('wsexport.opds_catalog'));
                                 $rep->htmlTagAttributes['prefix'] = 'og: http://ogp.me/ns#';
                                 $rep->addHeadContent('<meta property="og:title" content="' . jLocale::get('wsexport.site.long_name') . '" />');

@@ -18,6 +18,8 @@ class htmlResponse extends jResponseHtml5 {
 
 	public $xhtmlContentType = true;
 
+	public $action = '';
+
         function __construct() {
                 parent::__construct();
                 $this->headTagAttributes['profile'] = '';
@@ -30,6 +32,7 @@ class htmlResponse extends jResponseHtml5 {
 		$this->addLink(jUrl::get('wsexport~default:index'), 'start', '', jLocale::get('wsexport~wsexport.mainpage'));
                 $this->addLink(jUrl::get('wsexport~book:search', array('format' => 'opensearchdescription')), 'search', 'application/opensearchdescription+xml', jLocale::get('wsexport.search'));
 		$this->body->assignIfNone('MAIN', '<p>no content</p>');
+                $this->body->assignIfNone('action', $this->action);
 	}
 }
 

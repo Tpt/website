@@ -84,6 +84,7 @@ class bookCtrl extends myController {
                         case 'html':
                         case '':
                                 $rep = $this->getResponse('html');
+                                $rep->noRobots = true;
                                 $rep->addLink(jUrl::get('book:index', array_merge($this->request->params, array('format' => 'atom'))), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=acquisition', jLocale::get('wsexport.opds_catalog'));
                                 $rep->headTagAttributes['profile'] .= ' http://a9.com/-/spec/opensearch/1.1/';
                                 $rep->addHeadContent('<meta name="totalResults" content="' . $count . '" />');
@@ -273,6 +274,7 @@ class bookCtrl extends myController {
                         case 'html':
                         case '':
                                 $rep = $this->getResponse('html');
+                                $rep->noRobots = true;
                                 $rep->addLink(jUrl::get('book:index', array_merge($this->request->params, array('format' => 'atom'))), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=acquisition', jLocale::get('wsexport.opds_catalog'));
                                 $rep->headTagAttributes['profile'] .= ' http://a9.com/-/spec/opensearch/1.1/';
                                 $rep->addHeadContent('<meta name="totalResults" content="' . $count . '" />');
