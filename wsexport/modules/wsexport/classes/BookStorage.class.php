@@ -13,6 +13,8 @@
  * @subpackage wsexport
  */
 class BookStorage {
+
+        public static $SEARCH_KEYS = array('title', 'name', 'author', 'translator', 'illustrator', 'year');
         /**
          * get the book
          * @param $lang string the language code of the book
@@ -37,6 +39,16 @@ class BookStorage {
 		if($bookDao == null)
         		throw new HttpException('Not Found', 404);
                 return $this->getBook($bookDao);
+        }
+
+        /**
+         * get title of a book select by random
+         * @param $lang string the language code of the book
+         * @return string
+         */
+        public function getRandomTitle($lang) {
+                $bookDao = jDao::get('book')->random($lang);
+                return $bookDao->title;
         }
 
         /**
@@ -80,8 +92,8 @@ class BookStorage {
          */
         public function searchMetadatas($lang, $query, $itemPerPage = 20, $offset = 0) {
                 $books = array();
-                $count = jDao::get('book')->searchCount($lang, '%' . $query . '%');
-                $liste = jDao::get('book')->search($lang, '%' . $query . '%', $offset, $itemPerPage);
+                $count = jDao::get('book')->searchCount($lang, $query);
+                $liste = jDao::get('book')->search($lang, $query, $offset, $itemPerPage);
                 foreach($liste as $bookDao) {
       	                $books[] = $this->getBook($bookDao);
                 }
@@ -183,7 +195,7 @@ class BookStorage {
          */
         protected function getApiMetadata($lang, $title) {
                 $api = new Api($lang);
-      	        $provider = new BookProvider($api);
+                $provider = new BookProvider($api, true);
                 return $provider->get($title, true);
         }
 
@@ -214,6 +226,8 @@ class BookStorage {
                 $book->created = $bookDao->created;
                 $book->updated = $bookDao->updated;
                 $book->downloads = $bookDao->downloads;
+                $book->scan = $bookDao->scan;
+                $book->coverUrl = $bookDao->coverUrl;
                 return $book;
         }
 
@@ -248,6 +262,12 @@ class BookStorage {
                 $bookDao->key = $book->key;
                 $bookDao->progress = $book->progress;
                 $bookDao->volume = $book->volume;
+                $bookDao->scan = $book->scan;
+                if($book->cover != '' && isset($book->pictures[$book->cover])) {
+                        $bookDao->coverUrl = $book->pictures[$book->cover]->url;
+                } else {
+                        $bookDao->coverUrl = '';
+                }
                 return $bookDao;
         }
 }

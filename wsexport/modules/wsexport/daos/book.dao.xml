@@ -2,8 +2,8 @@
 <dao xmlns="http://jelix.org/ns/dao/1.0">
         <datasources>
                 <primarytable name="book" primarykey="lang, title" />
-	</datasources>
-	<record>
+        </datasources>
+        <record>
                 <property name="lang" datatype="varchar" required="true" minlength="2" maxlength="2" />
                 <property name="title" datatype="varchar" required="true" />
                 <property name="name" datatype="varchar" required="true" />
@@ -17,19 +17,21 @@
                 <property name="year" datatype="varchar" required="true" />
                 <property name="place" datatype="varchar" required="true" />
                 <property name="key" datatype="varchar" required="true" />
-	        <property name="progress" datatype="varchar" required="true" />
+                <property name="progress" datatype="varchar" required="true" />
                 <property name="volume" datatype="varchar" required="true" />
+                <property name="scan" datatype="varchar" required="true" />
+                <property name="coverUrl" datatype="varchar" required="true" />
                 <property name="created" datatype="datetime" insertpattern="NOW()" />
                 <property name="updated" datatype="datetime" insertpattern="NOW()" updatepattern="NOW()" />
                 <property name="downloads" datatype="integer" default="0" />
                 <property name="lastrevid" datatype="integer" default="0" />
-	</record>
-	<factory>
-		<method type="select" name="search" >
-		        <parameter name="lang" />
-		        <parameter name="query" />
-		        <parameter name="offset" />
-		        <parameter name="count" />
+        </record>
+        <factory>
+                <method type="select" name="search">
+                        <parameter name="lang" />
+                        <parameter name="query" />
+                        <parameter name="offset" />
+                        <parameter name="count" />
                         <conditions logic="AND">
                                 <eq property="lang" expr="$lang" />
                                 <conditions logic="OR">
@@ -42,11 +44,11 @@
                                         <like property="publisher" expr="$query" />
                                 </conditions>
                         </conditions>
-		        <limit offset="$offset" count="$count" />
-		</method>
-		<method type="count" name="searchCount" >
-		        <parameter name="lang" />
-		        <parameter name="query" />
+                        <limit offset="$offset" count="$count" />
+                </method>
+                <method type="count" name="searchCount">
+                        <parameter name="lang" />
+                        <parameter name="query" />
                         <conditions logic="AND">
                                 <eq property="lang" expr="$lang" />
                                 <conditions logic="OR">
@@ -59,6 +61,19 @@
                                         <like property="publisher" expr="$query" />
                                 </conditions>
                         </conditions>
-		</method>
-	</factory>
+                </method>
+                <method type="php" name="random">
+                        <parameter name="lang" />
+                        <body><![CDATA[
+                                $sql = $this->_selectClause.$this->_fromClause.$this->_whereClause;
+                                $sql .= ($this->_whereClause == ''?' WHERE ':' AND ');
+                                $sql .= ' lang = '. $this->_prepareValue($lang,'string');
+                                $sql .= ' ORDER BY RAND() LIMIT 1';
+                                $rs = $this->_conn->query($sql);
+                                $rs->setFetchMode(8,$this->_DaoRecordClassName);
+                                $record = $rs->fetch();
+                                return $record;
+                        ]]></body>
+                </method>
+        </factory>
 </dao>

@@ -17,4 +17,5 @@ class BookRecord extends Book {
         public $created = '';
         public $updated = '';
         public $downloads = 0;
+        public $coverUrl = '';
 }

@@ -2,7 +2,11 @@
 	<h1 itemprop="name">{$book->name|eschtml}</h1>
         {if $book->author}<h2>{@wsexport.by@} <span itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person"><a itemprop="url" href="{jurl 'book:index', array('lang' => $book->lang, 'author' => $book->author)}">{$book->author|eschtml}</a></span></h2>{/if}
 <div class="blockcontent">
-<div id="picture"></div>
+<div id="picture">
+        {if $book->coverUrl != ''}
+        <img itemprop="image" src="{$book->coverUrl}" alt="{@wsexport.cover@}" title="{@wsexport.cover@}" width="200" />
+        {/if}
+</div>
 <table id="info">
 	<caption>Description</caption>
 	<tr>

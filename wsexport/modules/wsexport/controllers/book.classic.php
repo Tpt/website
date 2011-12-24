@@ -19,19 +19,22 @@ class bookCtrl extends myController {
         public function index() {
                 $params = array();
                 $params['lang'] = $this->lang;
-                if($this->param('title'))
-                        $params['title'] = '%' . $this->param('title') . '%';
-                if($this->param('author'))
-                        $params['author'] = '%' . $this->param('author') . '%';
-                if($this->param('translator'))
-                        $params['translator'] = '%' . $this->param('translator') . '%';
-                if($this->param('illustrator'))
-                        $params['illustrator'] = '%' . $this->param('illustrator') . '%';
-                if($this->param('year'))
-                        $params['year'] = $this->param('year');
+                $startsWith = $this->boolParam('startsWith', false);
+                jClasses::inc('BookStorage');
+                foreach(BookStorage::$SEARCH_KEYS as $key) {
+                        if($this->param($key)) {
+                                if($startsWith)
+                                        $params[$key] = $this->param($key) . '%';
+                                else
+                                        $params[$key] = '%' . $this->param($key) . '%';
+                        }
+                }
                 switch($this->param('order')) {
                         case 'title':
                                 $order = 'title';
+                                break;
+                        case 'name':
+                                $order = 'name';
                                 break;
                         case 'year':
                                 $order = 'year';
@@ -46,7 +49,7 @@ class bookCtrl extends myController {
                                 $order = 'downloads';
                                 break;
                         default:
-                                $order = '';
+                                $order = 'name';
                 }
                 $wayAsc = $this->boolParam('asc', true);
                 $itemPerPage = $this->intParam('itemPerPage', 20);
@@ -122,17 +125,18 @@ class bookCtrl extends myController {
                         case 'html':
                         case '':
                                 $rep = $this->getResponse('html');
-                                $rep->addLink(jUrl::get('default:index', array('lang' => $this->lang, 'title' => $title, 'format' => 'atom')), 'alternate', 'application/atom+xml;type=entry;profile=opds-catalog', jLocale::get('wsexport.opds_catalog'));
+                                $rep->addLink(jUrl::get('book:view', array('lang' => $this->lang, 'title' => $title, 'format' => 'atom')), 'alternate', 'application/atom+xml;type=entry;profile=opds-catalog', jLocale::get('wsexport.opds_catalog'));
+                                $rep->addLink(jUrl::get('book:view', array('lang' => $this->lang, 'title' => $title)), 'canonical');
 		                $rep->title = $book->name;
 
                                 $dublincore = $rep->getPlugin('dublincore');
                                 $dublincore->addMeta('DC.identifier', 'urn:uuid:' . $book->uuid);
                                 $dublincore->addMeta('DC.identifier', 'http://' . $book->lang . '.wikisource.org/wiki/' . $book->title, 'DCTERMS.URI');
                                 $dublincore->addMeta('DC.language', $book->lang);
-                                $dublincore->addMeta('DC.title', $book->name);
-                                $dublincore->addMeta('DC.creator', $book->author);
-                                $dublincore->addMeta('DC.publisher', $book->publisher);
-                                $dublincore->addLink('DC.source', 'http://' . $book->lang . '.wikisource.org/wiki/' . $book->title);
+                                $dublincore->addMeta('DC.title', htmlspecialchars($book->name));
+                                $dublincore->addMeta('DC.creator', htmlspecialchars($book->author));
+                                $dublincore->addMeta('DC.publisher',htmlspecialchars($book->publisher));
+                                $dublincore->addLink('DC.source', 'http://' . $book->lang . '.wikisource.org/wiki/' . htmlspecialchars($book->title));
                                 $dublincore->addLink('DC.rights', 'http://creativecommons.org/licenses/by-sa/3.0/', 'en');
                                 $dublincore->addLink('DC.rights', 'http://www.gnu.org/copyleft/fdl.html', 'en');
                                 $dublincore->addMeta('DC.format', 'application/xhtml+xml', 'DCTERMS.IMT');
@@ -140,14 +144,15 @@ class bookCtrl extends myController {
 
                                 $rep->htmlTagAttributes['prefix'] = 'og: http://ogp.me/ns#';
                                 $rep->headTagAttributes['prefix'] = 'book: http://ogp.me/ns/book#';
-                                $rep->addHeadContent('<meta property="og:title" content="' . $book->name . '" />');
+                                $rep->addHeadContent('<meta property="og:title" content="' . htmlspecialchars($book->name) . '" />');
                                 $rep->addHeadContent('<meta property="og:type" content="book" />');
                                 $rep->addHeadContent('<meta property="og:url" content="' . jUrl::getFull('book:view', array('lang' => $book->lang, 'title' => $book->title), jUrl::XMLSTRING) . '" />');
-                                //$rep->addHeadContent('<meta property="og:image" content="" />');
+                                $rep->addHeadContent('<meta property="og:image" content="' . $book->coverUrl . '" />');
                                 //$rep->addHeadContent('<meta property="og:locale" content="' . '' . '" />'); TODO
                                 $rep->addHeadContent('<meta property="og:site_name" content="' . jLocale::get('wsexport.site.short_name') . '" />');
-                                $rep->addHeadContent('<meta property="book:author" content="' . $book->author . '" />');
-                                $rep->addHeadContent('<meta property="book:release_date" content="' . $book->year . '" />');
+                                $rep->addHeadContent('<meta property="book:author" content="' . htmlspecialchars($book->author) . '" />');
+                                if(is_numeric($book->year))
+                                        $rep->addHeadContent('<meta property="book:release_date" content="' . $book->year . '" />');
 
                                 $rep->headTagAttributes['profile'] .= ' http://microformats.org/profile/rel-license';
                                 $rep->addLink('http://creativecommons.org/licenses/by-sa/3.0/', 'licence', null, 'CC BY-SA 3.0');
@@ -204,6 +209,7 @@ class bookCtrl extends myController {
                 $query = trim($this->param('q'));
                 $itemPerPage = $this->intParam('itemPerPage', 20);
                 $offset = $this->intParam('offset', 0);
+                $startsWith = $this->boolParam('startsWith', false);
                 $bookStorage = jClasses::create('BookStorage');
                 try {
                         $book = $bookStorage->getMetadata($this->lang, str_replace(' ', '_', $query));
@@ -213,7 +219,10 @@ class bookCtrl extends myController {
 		        return $rep;
 		} catch(HttpException $e) {
                 }
-                $results = $bookStorage->searchMetadatas($this->lang, $query, $itemPerPage, $offset);
+                if($startsWith)
+                        $results = $bookStorage->searchMetadatas($this->lang, $query . '%', $itemPerPage, $offset);
+                else
+                        $results = $bookStorage->searchMetadatas($this->lang, '%' . $query . '%', $itemPerPage, $offset);
                 $count = $results[0];
                 $books = $results[1];
                 switch($this->format) {
@@ -286,13 +295,22 @@ class bookCtrl extends myController {
 		return $rep;
         }
 
+        public function random() {
+                $bookStorage = jClasses::create('BookStorage');
+                $title = $bookStorage->getRandomTitle($this->lang);
+                $rep = $this->getResponse('redirect');
+		$rep->action = 'book:view';
+                $rep->params = array('lang' => $this->lang, 'title' => $title);
+		return $rep;
+        }
 
         public function updateAll() {
                 $bookStorage = jClasses::create('BookStorage');
                 $book = $bookStorage->setMetadataFromCategory($this->lang, 'Catégorie:Bon_pour_export');
                 jMessage::add('Mise à jour effectuée');
                 $rep = $this->getResponse('redirect');
-		$rep->action = 'book:index';
+                $rep->action = 'book:index';
+                $rep->params = array('order' => 'updated', 'asc' => 'false');
 		return $rep;
         }
 }

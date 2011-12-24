@@ -14,9 +14,12 @@ CREATE TABLE IF NOT EXISTS `book` (
   `key` varchar(150) NOT NULL,
   `progress` varchar(100) NOT NULL,
   `volume` varchar(150) NOT NULL,
+  `scan` varchar(100) NOT NULL,
+  `coverUrl` varchar(500) NOT NULL,
   `created` datetime NOT NULL,
   `updated` datetime NOT NULL,
   `downloads` int(11) NOT NULL DEFAULT '0',
   `lastrevid` int(11) NOT NULL DEFAULT '0' COMMENT 'last revision id',
   PRIMARY KEY (`lang`,`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

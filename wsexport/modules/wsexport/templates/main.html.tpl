@@ -1,38 +1,16 @@
 {meta_html jquery}
 {meta_html jquery_ui 'theme'}
 {meta_html css $j_basepath.'main.css'}
+{meta_html js $j_basepath.'main.js'}
 {meta_html jquery_ui 'components', array('widget', 'position', 'autocomplete')}
 {literal}
 <script type="text/javascript">
 // <![CDATA[
-        $(function() {
-                $("#search-box").autocomplete({
-                        source: function(request, response) {
-			        $.ajax({
-					url: "{/literal}{jurl 'wsexport~book:search'}{literal}",
-					dataType: "json",
-					data: {
-						format: "opensearchsuggestions",
-						limit: 10,
-						q: request.term
-					},
-					success: function(data) {
-						response( $.map( data[1], function(item, i) {
-							return {
-								label: data[2][i],
-								value: data[1][i]
-							}
-						}));
-					}
-				});
-			},
-			minLength: 2,
-			select: function(event, ui) { //TODO Redirect to the content page
-				this.value = ui.item.value;
-				$("#quick-search").submit();
-			}
-		});
-    });
+        var wsexport = {
+                url: {
+                        booksearch: "{/literal}{jurl 'book:search'}{literal}"
+                }
+        };
 // ]]>
 </script>
 {/literal}
@@ -46,10 +24,11 @@
 			<h5>{@wsexport.navigation@}</h5>
 			<ul>
 				<li><a href="{jurl ''}" rel="home">{@wsexport.mainpage@}</a></li>
-				<li><a href="{jurl 'book:index'}" rel="directory">{@wsexport.all_books@}</a></li>
+				<li><a href="{jurl 'book:index', array('order' => 'name', 'asc' => 'true')}" rel="directory">{@wsexport.all_books@}</a></li>
 				<li><a href="{jurl 'book:index', array('order' => 'downloads', 'asc' => 'false')}" rel="directory">{@wsexport.popular_publications@}</a></li>
 				<li><a href="{jurl 'book:index', array('order' => 'created', 'asc' => 'false')}" rel="directory">{@wsexport.new_publications@}</a></li>
 				<li><a href="{jurl 'book:index', array('order' => 'downloads', 'asc' => 'true')}" rel="directory">{@wsexport.unpopular_publications@}</a></li>
+				<li><a href="{jurl 'book:random'}">{@wsexport.random_book@}</a></li>
 			</ul>
 		</nav>
 		{jmessage}
