@@ -21,6 +21,7 @@
                 <property name="volume" datatype="varchar" required="true" />
                 <property name="scan" datatype="varchar" required="true" />
                 <property name="coverUrl" datatype="varchar" required="true" />
+                <property name="iconUrl" datatype="varchar" required="true" />
                 <property name="created" datatype="datetime" insertpattern="NOW()" />
                 <property name="updated" datatype="datetime" insertpattern="NOW()" updatepattern="NOW()" />
                 <property name="downloads" datatype="integer" default="0" />

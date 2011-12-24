@@ -228,6 +228,7 @@ class BookStorage {
                 $book->downloads = $bookDao->downloads;
                 $book->scan = $bookDao->scan;
                 $book->coverUrl = $bookDao->coverUrl;
+                $book->iconUrl = $bookDao->iconUrl;
                 return $book;
         }
 
@@ -265,10 +266,19 @@ class BookStorage {
                 $bookDao->scan = $book->scan;
                 if($book->cover != '' && isset($book->pictures[$book->cover])) {
                         $bookDao->coverUrl = $book->pictures[$book->cover]->url;
+                        $bookDao->iconUrl = $this->getIconUrl($bookDao->coverUrl);
                 } else {
                         $bookDao->coverUrl = '';
+                        $bookDao->iconUrl = '';
                 }
                 return $bookDao;
+        }
+
+        protected function getIconUrl($coverUrl) {
+                if(strrpos($coverUrl, '-400px-') == false)
+                        return $coverUrl;
+                else
+                        return str_replace('-400px-', '-100px-', $coverUrl);
         }
 }
 

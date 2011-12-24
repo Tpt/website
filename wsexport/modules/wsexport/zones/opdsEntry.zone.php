@@ -14,5 +14,6 @@ class opdsEntryZone extends jZone {
                 $this->_tpl->assign('main', $this->param('main', false));
                 $this->_tpl->assign('book', $this->param('book'));
                 $this->_tpl->assign('self', jUrl::getCurrentUrl(true));
+                $this->_tpl->assign('coverType', jFile::getMimeTypeFromFilename(end(explode('/', $this->param('book')->coverUrl))));
         }
 }

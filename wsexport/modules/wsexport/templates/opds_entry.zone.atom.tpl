@@ -27,7 +27,10 @@
         <category label="{$categorie|escxml}" term="{$categorie|escxml}" />
         {/foreach}
         <link type="text/html" rel="alternate" href="{jurl "book:view", array('lang' => $book->lang, 'title' => $book->title, 'format' => 'html')}" />
-        {if $book->coverUrl}<link rel="http://opds-spec.org/image" href="{$book->coverUrl}" type="image/jpeg" />{/if}
+        {if $book->coverUrl}
+        <link rel="http://opds-spec.org/image" href="{$book->coverUrl}" type="{$coverType}" />
+        <link rel="http://opds-spec.org/image/thumbnail" href="{$book->iconUrl}" type="{$coverType}" />
+        {/if}
         <link type="application/epub+zip" rel="http://opds-spec.org/acquisition" href="{jurl 'book:get', array('lang' => $book->lang, 'format' => 'epub', 'title' => $book->title)}" />
         <link type="application/xhtml+xml" rel="http://opds-spec.org/acquisition" href="{jurl 'book:get', array('lang' => $book->lang, 'format' => 'xhtml', 'title' => $book->title)}" />
         <link type="application/vnd.oasis.opendocument.text" rel="http://opds-spec.org/acquisition" href="{jurl 'book:get', array('lang' => $book->lang, 'format' => 'odt', 'title' => $book->title)}" />
