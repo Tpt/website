@@ -1,8 +1,8 @@
 What is Wikisource Export Website ?
 ==========================
 
-Wikisource export website is a web site for easy downoads of books from Wikisource.
-He provide also an OPDS catalog.
+Wikisource export website is a web site for easy downloads of books from Wikisource in various electronic formats.
+It also provides an OPDS catalog.
 
 Installation
 ============
@@ -11,7 +11,7 @@ You have to download files and use it with jelix 1.3, that is downloadable <a hr
 Composition
 ===========
 
-This website is a jelix application name wsexport with only a module wsexport.
+This website is a jelix application named wsexport with only one module wsexport.
 
 Licence
 =======

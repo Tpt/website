@@ -3,15 +3,15 @@
         {if $book->author}<h2>{@wsexport.by@} <span itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person"><a itemprop="url" href="{jurl 'book:index', array('lang' => $book->lang, 'author' => $book->author)}">{$book->author|eschtml}</a></span></h2>{/if}
         <div class="row">
                 <div class="span4">
-                        {if $book->coverUrl != ''}<img itemprop="image" src="{$book->coverUrl}" alt="{@wsexport.cover@}" title="{@wsexport.cover@}" width="200" />{/if}
+                        {if $book->coverUrl != ''}<img itemprop="image" src="{$book->coverUrl}" alt="{@wsexport.cover@}" title="{@wsexport.cover@}" width="200" class="cover"/>{/if}
                 </div>
                 <div class="span8">
                         <table id="info">
-                                <caption>Description</caption>
-                                <tr>
-                                        <th>{@wsexport.language@}</th>{assign $lang = $book->lang}
-                                        <td><meta content="{$book->lang}" itemprop="inLanguage" /><a href="{jurl 'book:index', array('lang' => $book->lang)}">{@wsexport.lang.$lang@}</a></td>
-                                </tr>
+                          <caption><h5>{@wsexport.description@}</h5></caption>
+			  <tr>
+                            <th>{@wsexport.language@}</th>{assign $lang = $book->lang}
+                            <td><meta content="{$book->lang}" itemprop="inLanguage" /><a href="{jurl 'book:index', array('lang' => $book->lang)}">{@wsexport.lang.$lang@}</a></td>
+                          </tr>
                                 {if $book->year}
                                 <tr>
                                         <th>{@wsexport.published_in@}</th>
