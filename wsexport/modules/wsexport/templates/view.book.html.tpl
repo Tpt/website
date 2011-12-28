@@ -1,6 +1,6 @@
 <article itemscope="itemscope" itemtype="http://schema.org/Book">
         <h1 itemprop="name">{$book->name|eschtml}</h1>
-        {if $book->author}<h2>{@wsexport.by@} <span itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person"><a itemprop="url" href="{jurl 'book:index', array('lang' => $book->lang, 'author' => $book->author)}">{$book->author|eschtml}</a></span></h2>{/if}
+        {if $book->author}<h2>{@wsexport.by@} <span itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person"><a itemprop="url" href="{jurl 'person:view', array('lang' => $book->lang, 'title' => $book->author)}">{$book->author|eschtml}</a></span></h2>{/if}
         <div class="row">
                 <div class="span4">
                         {if $book->coverUrl != ''}<img itemprop="image" src="{$book->coverUrl}" alt="{@wsexport.cover@}" title="{@wsexport.cover@}" width="200" />{/if}
@@ -27,13 +27,13 @@
                                 {if $book->translator}
                                 <tr>
                                         <th>{@wsexport.translator@}</th>
-                                        <td itemprop="translator" itemscope="itemscope" itemtype="http://schema.org/Person"><a itemprop="url" href="{jurl 'book:index', array('lang' => $book->lang, 'translator' => $book->translator)}">{$book->translator|eschtml}</a></td>
+                                        <td itemprop="translator" itemscope="itemscope" itemtype="http://schema.org/Person"><a itemprop="url" href="{jurl 'person:view', array('lang' => $book->lang, 'title' => $book->translator)}">{$book->translator|eschtml}</a></td>
                                 </tr>
                                 {/if}
                                 {if $book->illustrator}
                                 <tr>
                                         <th>{@wsexport.illustrator@}</th>
-                                        <td itemprop="illustrator" itemscope="itemscope" itemtype="http://schema.org/Person"><a itemprop="url" href="{jurl 'book:index', array('lang' => $book->lang, 'illustrator' => $book->illustrator)}">{$book->illustrator|eschtml}</a></td>
+                                        <td itemprop="illustrator" itemscope="itemscope" itemtype="http://schema.org/Person"><a itemprop="url" href="{jurl 'person:view', array('lang' => $book->lang, 'title' => $book->illustrator)}">{$book->illustrator|eschtml}</a></td>
                                 </tr>
                                 {/if}
                         </table>

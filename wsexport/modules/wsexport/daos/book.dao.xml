@@ -47,6 +47,37 @@
                         </conditions>
                         <limit offset="$offset" count="$count" />
                 </method>
+                <method type="" name="getByPerson">
+                        <parameter name="lang" />
+                        <parameter name="person" />
+                        <parameter name="way" />
+                        <parameter name="offset" />
+                        <parameter name="count" />
+                        <conditions logic="AND">
+                                <eq property="lang" expr="$lang" />
+                                <conditions logic="OR">
+                                        <eq property="author" expr="$person" />
+                                        <eq property="translator" expr="$person" />
+                                        <eq property="illustrator" expr="$person" />
+                                </conditions>
+                        </conditions>
+                        <order>
+                                <orderitem property="title" way="$way" />
+                        </order>
+                        <limit offset="$offset" count="$count" />
+                </method>
+                <method type="count" name="countByPerson">
+                        <parameter name="lang" />
+                        <parameter name="person" />
+                        <conditions logic="AND">
+                                <eq property="lang" expr="$lang" />
+                                <conditions logic="OR">
+                                        <eq property="author" expr="$person" />
+                                        <eq property="translator" expr="$person" />
+                                        <eq property="illustrator" expr="$person" />
+                                </conditions>
+                        </conditions>
+                </method>
                 <method type="count" name="searchCount">
                         <parameter name="lang" />
                         <parameter name="query" />

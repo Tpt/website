@@ -5,7 +5,7 @@
         </div>
 	<div class="span8">
                 <h5><a itemprop="url" href="{jurl 'book:view', array('lang' => $book->lang, 'title' => $book->title)}">{$book->name|eschtml}</a></h5>
-                {if $book->author}<h6>{@wsexport.by@} <span itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person"><a  itemprop="url" href="{jurl 'book:index', array('lang' => $book->lang, 'author' => $book->author)}">{$book->author|eschtml}</a></span></h6>{/if}
+                {if $book->author}<h6>{@wsexport.by@} <span itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person"><a  itemprop="url" href="{jurl 'person:view', array('lang' => $book->lang, 'title' => $book->author)}">{$book->author|eschtml}</a></span></h6>{/if}
         </div>
         <div class="span4">
                 <a href="{jurl 'book:get', array('lang' => $book->lang, 'format' => 'epub', 'title' => $book->title)}" class="btn">{@wsexport.download@}</a>

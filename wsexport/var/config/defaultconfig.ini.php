@@ -42,7 +42,7 @@ jWSDL.access=0
 wsexport.access=2
 
 [coordplugins]
-;autolocale = autolocale.coord.ini.php
+autolocale = autolocale.coord.ini.php
 
 [tplplugins]
 defaultJformsBuilder=html

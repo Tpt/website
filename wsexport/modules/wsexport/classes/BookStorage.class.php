@@ -13,8 +13,13 @@
  * @subpackage wsexport
  */
 class BookStorage {
-
         public static $SEARCH_KEYS = array('title', 'name', 'author', 'translator', 'illustrator', 'year');
+        protected $factory = null;
+
+        public function __construct() {
+                $this->factory = jDao::get('book');
+        }
+
         /**
          * get the book
          * @param $lang string the language code of the book
@@ -35,7 +40,7 @@ class BookStorage {
          * @todo categories
          */
         public function getMetadata($lang, $title) {
-      	        $bookDao = jDao::get('book')->get(array($lang, $title));
+      	        $bookDao = $this->factory->get(array($lang, $title));
 		if($bookDao == null)
         		throw new HttpException('Not Found', 404);
                 return $this->getBook($bookDao);
@@ -47,7 +52,7 @@ class BookStorage {
          * @return string
          */
         public function getRandomTitle($lang) {
-                $bookDao = jDao::get('book')->random($lang);
+                $bookDao = $this->factory->random($lang);
                 return $bookDao->title;
         }
 
@@ -74,8 +79,8 @@ class BookStorage {
                                 $conditions->addItemOrder($order, 'DESC');
 
                 }
-                $count = jDao::get('book')->countBy($conditions);
-                $liste = jDao::get('book')->findBy($conditions, $offset, $itemPerPage);
+                $count = $this->factory->countBy($conditions);
+                $liste = $this->factory->findBy($conditions, $offset, $itemPerPage);
                 foreach($liste as $bookDao) {
       	                $books[] = $this->getBook($bookDao);
                 }
@@ -92,8 +97,28 @@ class BookStorage {
          */
         public function searchMetadatas($lang, $query, $itemPerPage = 20, $offset = 0) {
                 $books = array();
-                $count = jDao::get('book')->searchCount($lang, $query);
-                $liste = jDao::get('book')->search($lang, $query, $offset, $itemPerPage);
+                $count = $this->factory->searchCount($lang, $query);
+                $liste = $this->factory->search($lang, $query, $offset, $itemPerPage);
+                foreach($liste as $bookDao) {
+      	                $books[] = $this->getBook($bookDao);
+                }
+                return array($count, $books);
+        }
+
+        /**
+         * serach in books from the person
+         * @param $lang string the lang of the wikisource
+         * @param $person string the query
+         * @param $wayAsc bool if the search sort ascendently.
+         * @param $itemPerPage integer number of result to return
+         * @param $offset integer index of the current result
+         * @return array 0 => number of results, 1 => array|BookRecord
+         */
+        public function getMetadatasByPerson($lang, $person, $wayAsc = true, $itemPerPage = 20, $offset = 0) {
+                $way = ($wayAsc) ? 'asc' : 'desc';
+                $books = array();
+                $count = $this->factory->countByPerson($lang, $person);
+                $liste = $this->factory->getByPerson($lang, $person, $way, $offset, $itemPerPage);
                 foreach($liste as $bookDao) {
       	                $books[] = $this->getBook($bookDao);
                 }
@@ -113,7 +138,7 @@ class BookStorage {
                 $pages = $response['query']['pages'];
                 foreach($pages as $page) {
                         $title = str_replace(' ', '_', $page['title']);
-      	                $bookDao = jDao::get('book')->get(array($lang, $title));
+      	                $bookDao = $this->factory->get(array($lang, $title));
 		        if($bookDao == null)
         		        $this->createMetadata($lang, $title, $page['lastrevid']);
                         else if($bookDao->lastrevid != $page['lastrevid'])
@@ -129,11 +154,11 @@ class BookStorage {
          */
         public function createMetadata($lang, $title, $lastrevid = 0) {
                 $book = $this->getApiMetadata($lang, $title);
-                $bookFactory = jDao::get('book');
+
                 $bookDao = $this->getBookRecord($book);
                 $bookDao->uuid = $book->uuid;
                 $bookDao->lastrevid = $lastrevid;
-                $bookFactory->insert($bookDao);
+                $this->factory->insert($bookDao);
         }
 
         /**
@@ -144,11 +169,10 @@ class BookStorage {
          */
         public function updateMetadata($lang, $title, $lastrevid = 0) {
                 $book = $this->getApiMetadata($lang, $title);
-                $bookFactory = jDao::get('book');
-                $bookDao = $bookFactory->get(array($lang, $title));
+                $bookDao = $this->factory->get(array($lang, $title));
                 $bookDao = $this->updateBookRecord($bookDao, $book);
                 $bookDao->lastrevid = $lastrevid;
-                $bookFactory->update($bookDao);
+                $this->factory->update($bookDao);
         }
 
         /**
@@ -157,8 +181,7 @@ class BookStorage {
          * @param $title string the title of the book
          */
         public function deleteMetadata($lang, $title) {
-                $bookFactory = jDao::get('book');
-                $bookFactory->delete(array($lang, $title));
+                $this->factory->delete(array($lang, $title));
         }
 
         /**
@@ -167,10 +190,9 @@ class BookStorage {
          * @param $title string the title of the book
          */
         public function incrementDownload($lang, $title) {
-                $bookFactory = jDao::get('book');
-                $bookDao = $bookFactory->get(array($lang, $title));
+                $bookDao = $this->factory->get(array($lang, $title));
                 $bookDao->downloads++;
-                $bookFactory->update($bookDao);
+                $this->factory->update($bookDao);
         }
 
 

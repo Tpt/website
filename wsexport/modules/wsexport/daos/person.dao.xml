@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dao xmlns="http://jelix.org/ns/dao/1.0">
+        <datasources>
+                <primarytable name="person" primarykey="lang, title" />
+        </datasources>
+        <record>
+                <property name="lang" datatype="varchar" required="true" minlength="2" maxlength="2" />
+                <property name="title" datatype="varchar" required="true" />
+                <property name="name" datatype="varchar" required="true" />
+                <property name="description" datatype="varchar" required="true" />
+                <property name="birthDate" datatype="varchar" required="true" />
+                <property name="deathDate" datatype="varchar" required="true" />
+                <property name="imageUrl" datatype="varchar" required="true" />
+                <property name="key" datatype="varchar" required="true" />
+                <property name="wikipedia" datatype="varchar" required="true" />
+                <property name="wikiquote" datatype="varchar" required="true" />
+                <property name="commons" datatype="varchar" required="true" />
+                <property name="created" datatype="datetime" insertpattern="NOW()" />
+                <property name="updated" datatype="datetime" insertpattern="NOW()" updatepattern="NOW()" />
+                <property name="lastrevid" datatype="integer" default="0" />
+        </record>
+        <factory>
+        </factory>
+</dao>

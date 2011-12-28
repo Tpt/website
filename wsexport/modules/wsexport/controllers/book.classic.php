@@ -110,7 +110,7 @@ class bookCtrl extends myController {
          * informations on a book
          */
         public function view() {
-                $title = $this->param('title');
+                $title = $this->_getTitle();
                 $bookStorage = jClasses::create('BookStorage');
                 try {
                         $book = $bookStorage->getMetadata($this->lang, $title);
@@ -173,7 +173,7 @@ class bookCtrl extends myController {
          * get the book
          */
         public function get() {
-                $title = $this->param('title');
+                $title = $this->_getTitle();
                 $withPictures = $this->boolParam('withPictures', true);
                 $bookStorage = jClasses::create('BookStorage');
                 global $gJConfig;
@@ -309,6 +309,8 @@ class bookCtrl extends myController {
         public function updateAll() {
                 $bookStorage = jClasses::create('BookStorage');
                 $book = $bookStorage->setMetadataFromCategory($this->lang, 'Catégorie:Bon_pour_export');
+                $personStorage = jClasses::create('PersonStorage');
+                $personStorage->refresh($this->lang);
                 jMessage::add('Mise à jour effectuée');
                 $rep = $this->getResponse('redirect');
                 $rep->action = 'book:index';

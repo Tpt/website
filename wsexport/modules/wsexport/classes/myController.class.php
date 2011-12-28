@@ -30,4 +30,8 @@ class myController extends jController {
         		return $rep;
                 }
         }
+
+        protected function _getTitle() {
+                return str_replace(' ', '_', $this->param('title'));
+        }
 }

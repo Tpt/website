@@ -23,3 +23,21 @@ CREATE TABLE IF NOT EXISTS `book` (
   `lastrevid` int(11) NOT NULL DEFAULT '0' COMMENT 'last revision id',
   PRIMARY KEY (`lang`,`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `person` (
+  `title` varchar(150) NOT NULL,
+  `lang` varchar(2) NOT NULL,
+  `name` varchar(150) NOT NULL,
+  `description` text NOT NULL,
+  `birthDate` varchar(50) NOT NULL,
+  `deathDate` varchar(50) NOT NULL,
+  `imageUrl` varchar(200) NOT NULL,
+  `key` varchar(50) NOT NULL,
+  `wikipedia` varchar(150) NOT NULL,
+  `wikiquote` varchar(150) NOT NULL,
+  `commons` varchar(150) NOT NULL,
+  `created` datetime NOT NULL,
+  `updated` datetime NOT NULL,
+  `lastrevid` int(11) NOT NULL,
+  PRIMARY KEY (`lang`,`title`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
