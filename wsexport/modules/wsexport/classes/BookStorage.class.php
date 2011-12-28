@@ -156,7 +156,6 @@ class BookStorage {
                 $book = $this->getApiMetadata($lang, $title);
 
                 $bookDao = $this->getBookRecord($book);
-                $bookDao->uuid = $book->uuid;
                 $bookDao->lastrevid = $lastrevid;
                 $this->factory->insert($bookDao);
         }
@@ -229,7 +228,6 @@ class BookStorage {
          */
         protected function getBook(jDaoRecordBase $bookDao) {
                 $book = jClasses::create('BookRecord');
-                $book->uuid = $bookDao->uuid;
                 $book->title = $bookDao->title;
                 $book->lang = $bookDao->lang;
                 $book->type = $bookDao->type;

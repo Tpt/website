@@ -7,7 +7,6 @@
                 <property name="lang" datatype="varchar" required="true" minlength="2" maxlength="2" />
                 <property name="title" datatype="varchar" required="true" />
                 <property name="name" datatype="varchar" required="true" />
-                <property name="uuid" datatype="varchar" required="true" />
                 <property name="type" datatype="varchar" required="true" />
                 <property name="author" datatype="varchar" required="true" />
                 <property name="translator" datatype="varchar" required="true" />

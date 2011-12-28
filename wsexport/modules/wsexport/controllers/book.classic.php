@@ -131,7 +131,6 @@ class bookCtrl extends myController {
 		                $rep->title = $book->name;
 
                                 $dublincore = $rep->getPlugin('dublincore');
-                                $dublincore->addMeta('DC.identifier', 'urn:uuid:' . $book->uuid);
                                 $dublincore->addMeta('DC.identifier', 'http://' . $book->lang . '.wikisource.org/wiki/' . $book->title, 'DCTERMS.URI');
                                 $dublincore->addMeta('DC.language', $book->lang);
                                 $dublincore->addMeta('DC.title', htmlspecialchars($book->name));

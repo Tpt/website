@@ -16,7 +16,7 @@
         <updated>{$book->updated|jdatetime:'db_date':'iso8601'}</updated>
         <rights>CC-BY-SA 3.0 or GNU FDL</rights>
         <summary>{$book->name|escxml}</summary>
-        <dc:identifier xsi:type="dcterms:URI">urn:uuid:{$book->uuid|escxml}</dc:identifier>
+        <dc:identifier xsi:type="dcterms:URI">http://{$book->lang|escurl}.wikisource.org/wiki/{$book->title|escurl}</dc:identifier>
         <dc:language xsi:type="dcterms:RFC4646">{$book->lang|escxml}</dc:language>
         <dc:source xsi:type="dcterms:URI">http://{$book->lang|escurl}.wikisource.org/wiki/{$book->title|escurl}</dc:source>
         {if $book->year}<dcterms:issued {if is_numeric($book->year)} xsi:type="dcterms:W3CDTF"{/if} >{$book->year|escxml}</dcterms:issued>{/if}
