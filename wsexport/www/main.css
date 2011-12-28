@@ -64,6 +64,10 @@ ul.pagelinks li.pagelinks-disabled, li.pagelinks-current{
     padding: 0 14px;
 }
 
+ul.pagelinks li.pagelinks-current{
+    color: blue;
+}
+
 ul.pagelinks li.pagelinks-disabled:hover{
     background-color: transparent;
 }

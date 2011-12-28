@@ -8,6 +8,7 @@
                 <div class="span8">
                         <table id="info">
                           <caption><h5>{@wsexport.description@}</h5></caption>
+			  <tbody>
 			  <tr>
                             <th>{@wsexport.language@}</th>{assign $lang = $book->lang}
                             <td><meta content="{$book->lang}" itemprop="inLanguage" /><a href="{jurl 'book:index', array('lang' => $book->lang)}">{@wsexport.lang.$lang@}</a></td>
@@ -36,6 +37,7 @@
                                         <td itemprop="illustrator" itemscope="itemscope" itemtype="http://schema.org/Person"><a itemprop="url" href="{jurl 'book:index', array('lang' => $book->lang, 'illustrator' => $book->illustrator)}">{$book->illustrator|eschtml}</a></td>
                                 </tr>
                                 {/if}
+				</tbody>
                         </table>
                 </div>
                 <aside class="span4">
