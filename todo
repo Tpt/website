@@ -1,3 +1,6 @@
-html skin using bootstrap
+mobile skin using jQuey Mobile
 alphabetical list of books : a page for each letters.
-categories
+categories : those to import will be mark in a hidden category in Wikisource.
+Rolling refresh of the database.
+Manage other languages than French.
+Finish ODT export.
