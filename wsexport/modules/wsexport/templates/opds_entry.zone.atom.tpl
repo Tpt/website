@@ -1,10 +1,10 @@
 {if $main}
 <entry xml:lang="{$book->lang}" xmlns="http://www.w3.org/2005/Atom" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
-        <link type="application/atom+xml;type=entry;profile=opds-catalog" rel="self" href="{jfullurl "book:view", array('lang' => $book->lang, 'title' => $book->title, 'format' => 'atom')}" />
+        <link type="application/atom+xml;type=entry;profile=opds-catalog" rel="self" href="{jfullurl2 "book:view", array('lang' => $book->lang, 'title' => $book->title, 'format' => 'atom')}" />
 {else}
 <entry xml:lang="{$book->lang}">
 {/if}
-        <id xsi:type="dcterms:URI">{jfullurl "book:view", array('lang' => $book->lang, 'title' => $book->title)}</id>
+        <id xsi:type="dcterms:URI">{jfullurl2 "book:view", array('lang' => $book->lang, 'title' => $book->title)}</id>
         <title>{$book->name|escxml}</title>
         {if $book->author}
         <author>
