@@ -9,7 +9,7 @@
 // <![CDATA[
         var wsexport = {
                 url: {
-                        booksearch: "{/literal}{jurl 'book:search'}{literal}"
+                        booksearch: "{/literal}{jurl 'book:search', array('lang' => $lang)}{literal}"
                 }
         };
 // ]]>

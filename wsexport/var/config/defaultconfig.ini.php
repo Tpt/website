@@ -2,6 +2,8 @@
 ;for security reasons , don't remove or modify the first line
 ;this file doesn't list all possible properties. See lib/jelix/core/defaultconfig.ini.php for that
 
+useToolserverExport=false
+
 startModule=wsexport
 startAction="default:index"
 

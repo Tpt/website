@@ -172,37 +172,42 @@ class bookCtrl extends myController {
          * get the book
          */
         public function get() {
+                global $gJConfig;
                 $title = $this->_getTitle();
                 $withPictures = $this->boolParam('withPictures', true);
+                if($gJConfig->useToolserverExport == 'true') {
+                        $rep = $this->getResponse('redirectUrl');
+                        $rep->url = 'http://toolserver.org/~tpt/wsexport/book.php?lang='.$this->lang.'&page='.urlencode($title).'&format='.urlencode($this->format).'&withPictures='.$withPictures;
+                } else {
                 $bookStorage = jClasses::create('BookStorage');
-                global $gJConfig;
-                switch($this->format) {
-                        case 'epub':
-                                include($gJConfig->_modulesPathList['wsexport'].'/classes/wikisource-export/book/formats/Epub2Generator.php');
-                                $generator = new Epub2Generator();
-                                break;
-                        case 'odt':
-                                include($gJConfig->_modulesPathList['wsexport'].'/classes/wikisource-export/book/formats/OdtGenerator.php');
-                                $generator = new OdtGenerator();
-                                break;
-                        case 'xhtml':
-                                include($gJConfig->_modulesPathList['wsexport'].'/classes/wikisource-export/book/formats/XhtmlGenerator.php');
-                                $generator = new XhtmlGenerator();
-                                break;
-                        default:
-                                return $this->_error(404);
+                        switch($this->format) {
+                                case 'epub':
+                                        include($gJConfig->_modulesPathList['wsexport'].'/classes/wikisource-export/book/formats/Epub2Generator.php');
+                                        $generator = new Epub2Generator();
+                                        break;
+                                case 'odt':
+                                        include($gJConfig->_modulesPathList['wsexport'].'/classes/wikisource-export/book/formats/OdtGenerator.php');
+                                        $generator = new OdtGenerator();
+                                        break;
+                                case 'xhtml':
+                                        include($gJConfig->_modulesPathList['wsexport'].'/classes/wikisource-export/book/formats/XhtmlGenerator.php');
+                                        $generator = new XhtmlGenerator();
+                                        break;
+                                default:
+                                        return $this->_error(404);
+                        }
+                        try {
+                                $book = $bookStorage->get($this->lang, $title, $withPictures);
+                        } catch(HttpException $e) {
+                                return $this->_error($e->code);
+                        }
+                        $bookStorage->incrementDownload($this->lang, $title);
+                        $rep = $this->getResponse('binary');
+                        $rep->outputFileName = $title . '.' . $generator->getExtension();
+                        $rep->mimeType = $generator->getMimeType();
+                        $rep->content = $generator->create($book);
                 }
-                try {
-                        $book = $bookStorage->get($this->lang, $title, $withPictures);
-		} catch(HttpException $e) {
-        		return $this->_error($e->code);
-                }
-                $bookStorage->incrementDownload($this->lang, $title);
-                $rep = $this->getResponse('binary');
-                $rep->outputFileName = $title . '.' . $generator->getExtension();
-                $rep->mimeType = $generator->getMimeType();
-                $rep->content = $generator->create($book);
-                return $rep;
+		return $rep;
         }
 
         public function search() {
