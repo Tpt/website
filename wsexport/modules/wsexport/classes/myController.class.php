@@ -32,6 +32,12 @@ class myController extends jController {
         }
 
         protected function _getTitle() {
-                return str_replace(' ', '_', $this->param('title'));
+                return str_replace(' ', '_', urldecode($this->param('title')));
+        }
+
+        protected function _getHtmlResponse() {
+                $rep = $this->getResponse('html');
+                $rep->lang = $this->lang;
+                return $rep;
         }
 }

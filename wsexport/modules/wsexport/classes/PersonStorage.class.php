@@ -124,7 +124,8 @@ class personStorage {
         protected function refreshPerson($lang, $title) {
                 if($title == '')
                         return;
-      	        $personDao = $this->factory->get(array($lang, str_replace(' ', '_', $title)));
+                $title = str_replace(array(' ', '/'), array('_', '%2F'), $title);
+      	        $personDao = $this->factory->get(array($lang, $title));
 		if($personDao == null) {
         	        try {
         		        $this->create($lang, $title, 0); //TODO : evision id for sync
@@ -155,7 +156,7 @@ class personStorage {
          */
         protected function getPerson(jDaoRecordBase $personDao) {
                 $person = jClasses::create('PersonRecord');
-                $person->title = $personDao->title;
+                $person->title = urlencode($personDao->title);
                 $person->lang = $personDao->lang;
                 $person->name = $personDao->name;
                 $person->description = $personDao->description;

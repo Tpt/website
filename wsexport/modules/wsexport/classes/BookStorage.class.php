@@ -137,7 +137,7 @@ class BookStorage {
                         throw new HttpException('Not Found', 404);
                 $pages = $response['query']['pages'];
                 foreach($pages as $page) {
-                        $title = str_replace(' ', '_', $page['title']);
+                        $title = str_replace(array(' ', '/'), array('_', '%2F'), $page['title']);
       	                $bookDao = $this->factory->get(array($lang, $title));
 		        if($bookDao == null)
         		        $this->createMetadata($lang, $title, $page['lastrevid']);
@@ -205,7 +205,7 @@ class BookStorage {
         protected function getApi($lang, $title, $withPictures = true) {
                 $api = new Api($lang);
       	        $provider = new BookProvider($api, $withPictures);
-                return $provider->get($title);
+                return $provider->get(str_replace('%2F', '/', $title));
         }
 
         /**
@@ -217,7 +217,7 @@ class BookStorage {
         protected function getApiMetadata($lang, $title) {
                 $api = new Api($lang);
                 $provider = new BookProvider($api, true);
-                return $provider->get($title, true);
+                return $provider->get(str_replace('%2F', '/', $title), true);
         }
 
         /**
@@ -228,7 +228,7 @@ class BookStorage {
          */
         protected function getBook(jDaoRecordBase $bookDao) {
                 $book = jClasses::create('BookRecord');
-                $book->title = $bookDao->title;
+                $book->title = urlencode($bookDao->title);
                 $book->lang = $bookDao->lang;
                 $book->type = $bookDao->type;
                 $book->name = $bookDao->name;

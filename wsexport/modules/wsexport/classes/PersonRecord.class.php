@@ -23,6 +23,6 @@ class PersonRecord {
         public $imageUrl = '';
         public $key = '';
         public $wikipedia = '';
-        public $wikisource = '';
+        public $wikiquote = '';
         public $commons = '';
 }

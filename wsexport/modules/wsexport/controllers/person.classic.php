@@ -83,7 +83,7 @@ class personCtrl extends myController {
                                 break;
                         case 'html':
                         case '':
-                                $rep = $this->getResponse('html');
+                                $rep = $this->_getHtmlResponse();
                                 $rep->noRobots = true;
                                 $rep->addLink(jUrl::get('person:index', array_merge($this->request->params, array('format' => 'atom'))), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=acquisition', jLocale::get('wsexport.opds_catalog'));
                                 $rep->headTagAttributes['profile'] .= ' http://a9.com/-/spec/opensearch/1.1/';
@@ -130,7 +130,7 @@ class personCtrl extends myController {
                 switch($this->format) {
                         case 'html':
                         case '':
-                                $rep = $this->getResponse('html');
+                                $rep = $this->_getHtmlResponse();
                                 $rep->addLink(jUrl::get('person:view', array('lang' => $this->lang, 'title' => $title)), 'canonical');
 		                $rep->title = $person->name;
 

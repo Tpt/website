@@ -83,7 +83,7 @@ class bookCtrl extends myController {
                                 break;
                         case 'html':
                         case '':
-                                $rep = $this->getResponse('html');
+                                $rep = $this->_getHtmlResponse();
                                 $rep->noRobots = true;
                                 $rep->addLink(jUrl::get('book:index', array_merge($this->request->params, array('format' => 'atom'))), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=acquisition', jLocale::get('wsexport.opds_catalog'));
                                 $rep->headTagAttributes['profile'] .= ' http://a9.com/-/spec/opensearch/1.1/';
@@ -125,7 +125,7 @@ class bookCtrl extends myController {
                                 break;
                         case 'html':
                         case '':
-                                $rep = $this->getResponse('html');
+                                $rep = $this->_getHtmlResponse();
                                 $rep->addLink(jUrl::get('book:view', array('lang' => $this->lang, 'title' => $title, 'format' => 'atom')), 'alternate', 'application/atom+xml;type=entry;profile=opds-catalog', jLocale::get('wsexport.opds_catalog'));
                                 $rep->addLink(jUrl::get('book:view', array('lang' => $this->lang, 'title' => $title)), 'canonical');
 		                $rep->title = $book->name;
@@ -150,7 +150,7 @@ class bookCtrl extends myController {
                                 $rep->addHeadContent('<meta property="og:image" content="' . $book->coverUrl . '" />');
                                 //$rep->addHeadContent('<meta property="og:locale" content="' . '' . '" />'); TODO
                                 $rep->addHeadContent('<meta property="og:site_name" content="' . jLocale::get('wsexport.site.short_name') . '" />');
-                                $rep->addHeadContent('<meta property="book:author" content="' . htmlspecialchars($book->author) . '" />');
+                                $rep->addHeadContent('<meta property="book:author:username" content="' . htmlspecialchars($book->author) . '" />');
                                 if(is_numeric($book->year))
                                         $rep->addHeadContent('<meta property="book:release_date" content="' . $book->year . '" />');
 
@@ -272,7 +272,7 @@ class bookCtrl extends myController {
                                 break;
                         case 'html':
                         case '':
-                                $rep = $this->getResponse('html');
+                                $rep = $this->_getHtmlResponse();
                                 $rep->noRobots = true;
                                 $rep->addLink(jUrl::get('book:index', array_merge($this->request->params, array('format' => 'atom'))), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=acquisition', jLocale::get('wsexport.opds_catalog'));
                                 $rep->headTagAttributes['profile'] .= ' http://a9.com/-/spec/opensearch/1.1/';
@@ -313,7 +313,7 @@ class bookCtrl extends myController {
                 jMessage::add('Mise à jour effectuée');
                 $rep = $this->getResponse('redirect');
                 $rep->action = 'book:index';
-                $rep->params = array('order' => 'updated', 'asc' => 'false');
+                $rep->params = array('lang' => $this->lang, 'order' => 'updated', 'asc' => 'false');
 		return $rep;
         }
 }

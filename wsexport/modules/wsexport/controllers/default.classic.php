@@ -9,7 +9,15 @@
 jClasses::inc('myController');
 
 class defaultCtrl extends myController {
+
         function index() {
+                $rep = $this->getResponse('redirect');
+		$rep->action = 'default:home';
+                $rep->params = array('lang' => $this->lang);
+                return $rep;
+        }
+
+        function home() {
                 switch($this->format) {
                         case 'sitemap':
                                 $rep = $this->getResponse('sitemap');
@@ -28,9 +36,9 @@ class defaultCtrl extends myController {
                                 break;
                         case 'html':
                         case '':
-                                $rep = $this->getResponse('html');
+                                $rep = $this->_getHtmlResponse();
                                 $rep->action = 'home';
-                                $rep->addLink(jUrl::get('default:index', array('lang' => $this->lang, 'format' => 'atom')), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=navigation', jLocale::get('wsexport.opds_catalog'));
+                                $rep->addLink(jUrl::get('default:home', array('lang' => $this->lang, 'format' => 'atom')), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=navigation', jLocale::get('wsexport.opds_catalog'));
                                 $rep->htmlTagAttributes['prefix'] = 'og: http://ogp.me/ns#';
                                 $rep->addHeadContent('<meta property="og:title" content="' . jLocale::get('wsexport.site.long_name') . '" />');
                                 $rep->addHeadContent('<meta property="og:type" content="website" />');
@@ -41,7 +49,23 @@ class defaultCtrl extends myController {
                                 $rep->addHeadContent('<meta property="og:description" content="' . jLocale::get('wsexport.site.description') . '" />');
                                 $tpl = new jTpl();
                                 $tpl->assign('lang', $this->lang);
-        		        $rep->body->assign('MAIN', $tpl->fetch('index.default.html'));
+        		        $rep->body->assign('MAIN', $tpl->fetch('home.default.html'));
+                                break;
+                        default:
+                                return $this->_error(404);
+                }
+		return $rep;
+        }
+
+        function about() {
+                switch($this->format) {
+                        case 'html':
+                        case '':
+                                $rep = $this->_getHtmlResponse();
+                                $rep->action = 'about';
+                                $tpl = new jTpl();
+                                $tpl->assign('lang', $this->lang);
+        		        $rep->body->assign('MAIN', $tpl->fetch('about.default.html'));
                                 break;
                         default:
                                 return $this->_error(404);
