@@ -44,7 +44,7 @@ class defaultCtrl extends myController {
                                 $rep->addHeadContent('<meta property="og:type" content="website" />');
                                 $rep->addHeadContent('<meta property="og:url" content="' . jUrl::getFull('#') . '" />');
                                 //$rep->addHeadContent('<meta property="og:image" content="" />');
-                                //$rep->addHeadContent('<meta property="og:locale" content="' . '' . '" />'); TODO
+                                $rep->addHeadContent('<meta property="og:locale" content="' . $this->_getFullLang($this->lang) . '" />');
                                 $rep->addHeadContent('<meta property="og:site_name" content="' . jLocale::get('wsexport.site.short_name') . '" />');
                                 $rep->addHeadContent('<meta property="og:description" content="' . jLocale::get('wsexport.site.description') . '" />');
                                 $tpl = new jTpl();

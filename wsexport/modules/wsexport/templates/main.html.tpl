@@ -24,7 +24,7 @@
                                         <li {if $action == 'home'}class="active"{/if}><a href="{jurl 'default:home', array('lang' => $lang)}" rel="home">{@wsexport.home@}</a></li>
                                         <li {if $action == 'about'}class="active"{/if}><a href="{jurl 'default:about', array('lang' => $lang)}">{@wsexport.about@}</a></li>
                                 </ul>
-                                <form action="{jurl 'wsexport~book:search'}" method="GET" id="quick-search" role="search" class="pull-right"><input type="search" name="q" id="search-box" placeholder="{@wsexport.search@}" /><input type="submit" value="{@wsexport.search@}" /></form>
+                                <form action="{jurl 'wsexport~book:search', array('lang' => $lang)}" method="GET" id="quick-search" role="search" class="pull-right"><input type="search" name="q" id="search-box" placeholder="{@wsexport.search@}" /><input type="submit" value="{@wsexport.search@}" /></form>
                         </div>
                 </div>
         </header>

@@ -148,7 +148,7 @@ class bookCtrl extends myController {
                                 $rep->addHeadContent('<meta property="og:type" content="book" />');
                                 $rep->addHeadContent('<meta property="og:url" content="' . jUrl::getFull('book:view', array('lang' => $book->lang, 'title' => $book->title), jUrl::XMLSTRING) . '" />');
                                 $rep->addHeadContent('<meta property="og:image" content="' . $book->coverUrl . '" />');
-                                //$rep->addHeadContent('<meta property="og:locale" content="' . '' . '" />'); TODO
+                                $rep->addHeadContent('<meta property="og:locale" content="' . $this->_getFullLang($book->lang) . '" />');
                                 $rep->addHeadContent('<meta property="og:site_name" content="' . jLocale::get('wsexport.site.short_name') . '" />');
                                 $rep->addHeadContent('<meta property="book:author:username" content="' . htmlspecialchars($book->author) . '" />');
                                 if(is_numeric($book->year))

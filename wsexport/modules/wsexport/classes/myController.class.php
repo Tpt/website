@@ -40,4 +40,8 @@ class myController extends jController {
                 $rep->lang = $this->lang;
                 return $rep;
         }
+
+        protected function _getFullLang($lang) {
+                return $lang . '_' . strtoupper($lang);
+        }
 }

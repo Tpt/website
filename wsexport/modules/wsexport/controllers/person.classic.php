@@ -138,7 +138,7 @@ class personCtrl extends myController {
                                 $rep->addHeadContent('<meta property="og:title" content="' . htmlspecialchars($person->name) . '" />');
                                 $rep->addHeadContent('<meta property="og:url" content="' . jUrl::getFull('person:view', array('lang' => $person->lang, 'title' => $person->title), jUrl::XMLSTRING) . '" />');
                                 $rep->addHeadContent('<meta property="og:image" content="' . $person->imageUrl . '" />');
-                                //$rep->addHeadContent('<meta property="og:locale" content="' . '' . '" />'); TODO
+                                $rep->addHeadContent('<meta property="og:locale" content="' . $this->_getFullLang($person->lang) . '" />');
                                 $rep->addHeadContent('<meta property="og:site_name" content="' . jLocale::get('wsexport.site.short_name') . '" />');
 
                                 $rep->headTagAttributes['profile'] .= ' http://microformats.org/profile/rel-license';
