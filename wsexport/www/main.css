@@ -18,6 +18,14 @@ body {
       background-color: #EFEFEF;
 }
 
+h1[itemprop=name]{
+    margin-bottom:0px;
+}
+
+article > hr{
+    margin:0.5em 0em;
+}
+
 img.cover{
     border: 1px solid #ddd;
 }
