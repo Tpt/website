@@ -1,6 +1,7 @@
-mobile skin using jQuey Mobile
-alphabetical list of books : a page for each letters.
-categories : those to import will be mark in a hidden category in Wikisource.
-Rolling refresh of the database.
-Manage other languages than French.
-Finish ODT export.
+* mobile skin using jQuey Mobile
+* alphabetical list of books : a page for each letters.
+* categories : those to import will be mark in a hidden category in Wikisource.
+* Rolling refresh of the database.
+* Manage other languages than French.
+* Finish ODT export.
+* Improve the search system: typographic apostrophes are not matched by regular apostrophes, we should probably remove all the diacritics from the search query string and compare the simplified string to the simplified book titles.

@@ -1,6 +1,6 @@
 <article>
         <div class="hero-unit">
-                <h1>Welcome on the website of export of Wikisource books !</h1>
-                <p>You will find here books downloadable in many file formats</p>
+                <h1>Welcome to the website for the export of Wikisource books!</h1>
+                <p>Here you will find books avaiable for download in various file formats</p>
         </div>
 </article>

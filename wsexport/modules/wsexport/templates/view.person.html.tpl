@@ -1,11 +1,14 @@
 <article itemscope="itemscope" itemtype="http://schema.org/Person">
         <h1 itemprop="name">{$person->name|eschtml}</h1>
-        {if $person->birthDate || $person->deathDate}<h2>({if is_numeric($person->birthDate)}<time itemprop="birthDate" datetime="{$person->birthDate}">{$person->birthDate}</time>{else}{$person->birthDate|eschtml}{/if} - {if is_numeric($person->deathDate)}<time itemprop="deathDate" datetime="{$person->deathDate}">{$person->deathDate}</time>{else}{$person->deathDate|eschtml}{/if})</h2>{/if}
+        {if $person->birthDate || $person->deathDate}<h2 class="date">({if is_numeric($person->birthDate)}<time itemprop="birthDate" datetime="{$person->birthDate}">{$person->birthDate}</time>{else}{$person->birthDate|eschtml}{/if} - {if is_numeric($person->deathDate)}<time itemprop="deathDate" datetime="{$person->deathDate}">{$person->deathDate}</time>{else}{$person->deathDate|eschtml}{/if})</h2>{/if}
+	<hr/>
         <div class="row">
                 <div class="span4">
                         {if $person->imageUrl != ''}<img itemprop="image" src="{$person->imageUrl}" alt="{@wsexport.cover@}" title="{@wsexport.cover@}" width="200" />{/if}
                 </div>
-                <div itemprop="description" class="span8">{$person->description|eschtml}</div>
+                <div itemprop="description" class="span8"><h5>{@wsexport.about@}</h5>
+		  {$person->description|eschtml}
+		</div>
                 <aside class="span4">
                         <h5>{@wsexport.links@}</h5>
                         <ul>
