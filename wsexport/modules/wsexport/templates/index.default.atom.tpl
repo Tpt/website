@@ -18,21 +18,21 @@
                 <title>{@wsexport.popular_publications@}</title>
                 <link type="application/atom+xml;profile=opds-catalog;kind=acquisition" rel="http://opds-spec.org/sort/popular" href="{jurl 'book:index', array('lang' => $lang, 'format' => 'atom', 'order' => 'downloads', 'asc' => 'false')}" />
                 <updated>{$now}</updated>
-                <id>{jurl 'book:index', array('lang' => $lang, 'format' => 'atom', 'order' => 'downloads', 'asc' => 'false')}</id>
+                <id>{jfullurl2 'book:index', array('lang' => $lang, 'format' => 'atom', 'order' => 'downloads', 'asc' => 'false')}</id>
                 <content type="text">{@wsexport.popular_publications.desc@}</content>
         </entry>
         <entry>
                 <title>{@wsexport.new_publications@}</title>
                 <link type="application/atom+xml;profile=opds-catalog;kind=acquisition" rel="http://opds-spec.org/sort/new" href="{jurl 'book:index', array('lang' => $lang, 'format' => 'atom', 'order' => 'created', 'asc' => 'false')}" />
                 <updated>{$now}</updated>
-                <id>{jurl 'book:index', array('lang' => $lang, 'format' => 'atom', 'order' => 'created', 'asc' => 'false')}</id>
+                <id>{jfullurl2 'book:index', array('lang' => $lang, 'format' => 'atom', 'order' => 'created', 'asc' => 'false')}</id>
                 <content type="text">{@wsexport.new_publications.desc@}</content>
         </entry>
         <entry>
                 <title>{@wsexport.unpopular_publications@}</title>
                 <link type="application/atom+xml;profile=opds-catalog;kind=acquisition" rel="http://opds-spec.org/sort/unpopular" href="{jurl 'book:index', array('lang' => $lang, 'format' => 'atom', 'order' => 'downloads', 'asc' => 'true')}" />
                 <updated>{$now}</updated>
-                <id>{jurl 'book:index', array('lang' => $lang, 'format' => 'atom', 'order' => 'downloads', 'asc' => 'true')}</id>
+                <id>{jfullurl2 'book:index', array('lang' => $lang, 'format' => 'atom', 'order' => 'downloads', 'asc' => 'true')}</id>
                 <content type="text">{@wsexport.unpopular_publications.desc@}</content>
         </entry>
 </feed>

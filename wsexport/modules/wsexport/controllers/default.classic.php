@@ -22,7 +22,8 @@ class defaultCtrl extends myController {
                         case 'sitemap':
                                 $rep = $this->getResponse('sitemap');
                                 //$rep->addUrl(jUrl::get('#'), date('Y-m-d'));
-			        $rep->addSitemap(jUrl::get('book:index', array('format' => 'sitemap')), date('Y-m-d'));
+			        $rep->addSitemap(jUrl::get('book:index', array('lang' => $this->lang, 'format' => 'sitemap')), date('Y-m-d'));
+                                $rep->addSitemap(jUrl::get('person:index', array('lang' => $this->lang, 'format' => 'sitemap')), date('Y-m-d'));
                                 break;
                         case 'atom':
                                 $rep = $this->getResponse('xml');

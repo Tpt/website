@@ -26,7 +26,7 @@
         {foreach $book->categories as $categorie}
         <category label="{$categorie|escxml}" term="{$categorie|escxml}" />
         {/foreach}
-        <link type="text/html" rel="alternate" href="{jurl "book:view", array('lang' => $book->lang, 'title' => $book->title, 'format' => 'html')}" />
+        <link type="application/xhtml+xml" rel="alternate" href="{jurl "book:view", array('lang' => $book->lang, 'title' => $book->title, 'format' => 'html')}" />
         {if $book->coverUrl}
         <link rel="http://opds-spec.org/image" href="{$book->coverUrl}" type="{$coverType}" />
         <link rel="http://opds-spec.org/image/thumbnail" href="{$book->iconUrl}" type="{$coverType}" />

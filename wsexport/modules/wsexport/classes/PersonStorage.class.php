@@ -60,7 +60,7 @@ class personStorage {
                 $count = $this->factory->countBy($conditions);
                 $liste = $this->factory->findBy($conditions, $offset, $itemPerPage);
                 foreach($liste as $personDao) {
-      	                $people[] = $this->getPersons($personDao);
+      	                $people[] = $this->getPerson($personDao);
                 }
                 return array($count, $people);
         }
@@ -73,6 +73,8 @@ class personStorage {
          */
         public function create($lang, $title, $lastrevid = 0) {
                 $person = $this->getApi($lang, $title);
+                if($person->name == '')
+                        return;
                 $personDao = $this->getpersonRecord($person);
                 $personDao->lastrevid = $lastrevid;
                 $this->factory->insert($personDao);

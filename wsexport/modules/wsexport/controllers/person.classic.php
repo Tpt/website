@@ -36,8 +36,11 @@ class personCtrl extends myController {
                         case 'name':
                                 $order = 'name';
                                 break;
-                        case 'year':
-                                $order = 'year';
+                        case 'birthDate':
+                                $order = 'birthDate';
+                                break;
+                        case 'deathDate':
+                                $order = 'deathDate';
                                 break;
                         case 'created':
                                 $order = 'created';
@@ -45,17 +48,17 @@ class personCtrl extends myController {
                         case 'modified':
                                 $order = 'modified';
                                 break;
-                        case 'downloads':
-                                $order = 'downloads';
-                                break;
                         default:
-                                $order = 'name';
+                                $order = 'key';
                 }
                 $wayAsc = $this->boolParam('asc', true);
-                $itemPerPage = $this->intParam('itemPerPage', 20);
+                if($this->format == 'sitemap')
+                        $itemPerPage = $this->intParam('itemPerPage', 50000);
+                else
+                        $itemPerPage = $this->intParam('itemPerPage', 20);
                 $offset = $this->intParam('offset', 0);
                 $personStorage = jClasses::create('PersonStorage');
-                $results = $personStorage->getMetadatas($params, $order, $wayAsc, $itemPerPage, $offset);
+                $results = $personStorage->gets($params, $order, $wayAsc, $itemPerPage, $offset);
                 $count = $results[0];
                 $people = $results[1];
                 switch($this->format) {
@@ -68,7 +71,7 @@ class personCtrl extends myController {
                                 break;
                         case 'atom':
                                 $rep = $this->getResponse('xml');
-                                $rep->addHttpHeader('Content-Type', 'application/atom+xml;profile=opds-catalog;kind=acquisition', true);
+                                $rep->addHttpHeader('Content-Type', 'application/atom+xml;profile=opds-catalog;kind=navigation', true);
 		                $rep->contentTpl = 'index.person.atom';
                                 $rep->content->assign('people', $people);
                                 $rep->content->assign('lang', $this->lang);
@@ -128,6 +131,21 @@ class personCtrl extends myController {
                 $count = $results[0];
                 $books = $results[1];
                 switch($this->format) {
+                        case 'atom':
+                                $rep = $this->getResponse('xml');
+                                $rep->addHttpHeader('Content-Type', 'application/atom+xml;profile=opds-catalog;kind=acquisition', true);
+                                $rep->contentTpl = 'index.book.atom';
+                                $rep->content->assign('books', $books);
+                                $rep->content->assign('lang', $this->lang);
+                                $rep->content->assign('params', $this->request->params);
+                                $rep->content->assign('count', $count);
+                                $rep->content->assign('offset', $offset);
+                                $rep->content->assign('itemPerPage', $itemPerPage);
+                                $dt = new jDateTime();
+                                $dt->now();
+                                $now = $dt->toString(jDateTime::ISO8601_FORMAT);
+                                $rep->content->assign('now', $now);
+                                break;
                         case 'html':
                         case '':
                                 $rep = $this->_getHtmlResponse();

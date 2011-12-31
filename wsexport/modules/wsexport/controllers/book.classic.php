@@ -52,7 +52,10 @@ class bookCtrl extends myController {
                                 $order = 'name';
                 }
                 $wayAsc = $this->boolParam('asc', true);
-                $itemPerPage = $this->intParam('itemPerPage', 20);
+                if($this->format == 'sitemap')
+                        $itemPerPage = $this->intParam('itemPerPage', 50000);
+                else
+                        $itemPerPage = $this->intParam('itemPerPage', 20);
                 $offset = $this->intParam('offset', 0);
                 $bookStorage = jClasses::create('BookStorage');
                 $results = $bookStorage->getMetadatas($params, $order, $wayAsc, $itemPerPage, $offset);
