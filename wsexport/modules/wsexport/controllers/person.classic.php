@@ -141,6 +141,7 @@ class personCtrl extends myController {
                                 $rep->content->assign('count', $count);
                                 $rep->content->assign('offset', $offset);
                                 $rep->content->assign('itemPerPage', $itemPerPage);
+                                $rep->content->assign('icon', $person->imageUrl);
                                 $dt = new jDateTime();
                                 $dt->now();
                                 $now = $dt->toString(jDateTime::ISO8601_FORMAT);

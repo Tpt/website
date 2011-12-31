@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `book` (
-  `title` varchar(100) NOT NULL,
-  `name` varchar(150) NOT NULL,
+  `title` varchar(200) NOT NULL,
+  `name` varchar(300) NOT NULL,
   `lang` varchar(2) NOT NULL,
   `type` varchar(50) NOT NULL,
   `author` varchar(150) NOT NULL,

@@ -2,7 +2,7 @@
         <id>{jfullurl2 '#', $params}</id>
         <title>{$title|escxml}</title>
         <updated>{$now}</updated>
-        <icon></icon>
+        {if isset($icon)}<icon>{$icon|escxml}</icon>{/if}
         <author>
                 <name></name>
                 <uri>{jurl ''}</uri>

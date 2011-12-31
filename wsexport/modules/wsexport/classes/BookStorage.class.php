@@ -138,7 +138,7 @@ class BookStorage {
                 $pages = $response['query']['pages'];
                 foreach($pages as $page) {
                         $title = str_replace(array(' ', '/'), array('_', '%2F'), $page['title']);
-      	                $bookDao = $this->factory->get(array($lang, $title));
+      	                $bookDao = $this->factory->get(array($lang, str_replace('%2F', '/', $title)));
 		        if($bookDao == null)
         		        $this->createMetadata($lang, $title, $page['lastrevid']);
                         else if($bookDao->lastrevid != $page['lastrevid'])

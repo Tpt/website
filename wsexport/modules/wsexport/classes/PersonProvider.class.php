@@ -38,9 +38,9 @@ class PersonProvider {
                 $person->wikipedia = $parser->getMetadata('ws-wikipedia');
                 $person->wikiquote = $parser->getMetadata('ws-wikiquote');
                 $person->commons = $parser->getMetadata('ws-commons');
-                $image = $parser->getMetadata('ws-cover');
+                $image = $parser->getMetadata('ws-image');
                 if($image != '')
-                        $person->image = $this->getImageUrl($image);
+                        $person->imageUrl = $this->getImageUrl($image);
                 return $person;
         }
 
@@ -57,7 +57,7 @@ class PersonProvider {
         }
 
         protected function getImageUrl($image) {
-                $response = $this->api->query(array('titles' => 'File:' . $title, 'prop' => 'imageinfo', 'iiprop' => 'url'));
+                $response = $this->api->query(array('titles' => 'File:' . $image, 'prop' => 'imageinfo', 'iiprop' => 'url'));
                 $page = end($response['query']['pages']);
                 return $page['imageinfo'][0]['url'];
         }

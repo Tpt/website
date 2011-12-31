@@ -29,7 +29,7 @@
                 <link type="application/xhtml+xml" rel="alternate" href="{jurl 'person:view', array('lang' => $person->lang, 'format' => 'html', 'title' => $person->title)}" />
                 <updated>{$now}</updated>
                 <id xsi:type="dcterms:URI">{jfullurl2 'person:view', array('lang' => $person->lang, 'format' => 'atom', 'title' => $person->title)}</id>
-                {if $person->imageUrl != ''}<link rel="http://opds-spec.org/image/thumbnail" href="{$book->imageUrl}" type="" />{/if}
+                {if $person->imageUrl != ''}<link rel="http://opds-spec.org/image/thumbnail" href="{$person->imageUrl}" type="" />{/if}
         </entry>
         {/foreach}
 </feed>

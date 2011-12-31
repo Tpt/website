@@ -17,6 +17,6 @@
 </div>
 {if $count > $itemPerPage}
 <div class="row navigation">
-  <p class="span8 offset4">{pagelinks 'view:index', $params, $count, $offset, $itemPerPage, 'offset'}</p>
+  <p class="span8 offset4">{pagelinks 'person:index', $params, $count, $offset, $itemPerPage, 'offset'}</p>
 </div>
 {/if}
