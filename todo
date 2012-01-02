@@ -5,3 +5,4 @@
 * Manage other languages than French.
 * Finish ODT export.
 * Improve the search system: typographic apostrophes are not matched by regular apostrophes, we should probably remove all the diacritics from the search query string and compare the simplified string to the simplified book titles.
+* Facet OPDS

@@ -1,5 +1,5 @@
 <article itemscope="itemscope" itemtype="http://schema.org/Book">
-        <h1 itemprop="name">{$book->name|eschtml}</h1>
+        <h1><span itemprop="name">{$book->name|eschtml}</span>{if $book->volume != ''}, {$book->volume|escxml}{/if}</h1>
         {if $book->author}<h2>{@wsexport.by@} <span itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person"><a itemprop="url" href="{jurl 'person:view', array('lang' => $book->lang, 'title' => $book->author)}">{$book->author|eschtml}</a></span></h2>{/if}
         <div class="row">
                 <div class="span4">
@@ -49,7 +49,7 @@
                         </ul>
                         <h5>{@wsexport.source@}</h5>
                         <ul>
-                                <li><a href="http://{$book->lang}.wikisource.org/wiki/{$book->title|escurl}">Wikisource</a></li>
+                                <li><a href="http://{$book->lang}.wikisource.org/wiki/{$book->title|eschtml}">Wikisource</a></li>
                         </ul>
                 </aside>
         </div>

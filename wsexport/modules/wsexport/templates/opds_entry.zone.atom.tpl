@@ -5,7 +5,7 @@
 <entry xml:lang="{$book->lang}">
 {/if}
         <id xsi:type="dcterms:URI">{jfullurl2 "book:view", array('lang' => $book->lang, 'title' => $book->title)}</id>
-        <title>{$book->name|escxml}</title>
+        <title>{$book->name|escxml}{if $book->volume != ''}, {$book->volume|escxml}{/if}</title>
         {if $book->author}
         <author>
                 <name>{$book->author|escxml}</name>

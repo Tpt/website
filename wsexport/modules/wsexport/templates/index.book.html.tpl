@@ -9,7 +9,7 @@
     {/if}
   </div>
   <div class="span8">
-    <h5><a itemprop="url" href="{jurl 'book:view', array('lang' => $book->lang, 'title' => $book->title)}">{$book->name|eschtml}</a></h5>
+    <h5><a itemprop="url" href="{jurl 'book:view', array('lang' => $book->lang, 'title' => $book->title)}">{$book->name|eschtml}{if $book->volume != ''}, {$book->volume|escxml}{/if}</a></h5>
     {if $book->author}
     <h6>
       {@wsexport.by@}
