@@ -314,7 +314,7 @@ class bookCtrl extends myController {
                 $title = $bookStorage->getRandomTitle($lang);
                 $rep = $this->getResponse('redirect');
                 $rep->action = 'book:view';
-                $rep->params = array('lang' => $lang, 'title' => $title);
+                $rep->params = array('lang' => $lang, 'title' => urlencode($title));
                 return $rep;
         }
 
