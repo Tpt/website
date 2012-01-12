@@ -168,7 +168,7 @@ class BookStorage {
          */
         public function updateMetadata($lang, $title, $lastrevid = 0) {
                 $book = $this->getApiMetadata($lang, $title);
-                $bookDao = $this->factory->get(array($lang, $title));
+                $bookDao = $this->factory->get(array($lang, str_replace('%2F', '/', $title)));
                 $bookDao = $this->updateBookRecord($bookDao, $book);
                 $bookDao->lastrevid = $lastrevid;
                 $this->factory->update($bookDao);

@@ -13,6 +13,6 @@ urlParamNameLanguage = lang
 
 
 ; utilisation du langage indiqué dans le navigateur
-useDefaultLanguageBrowser = off
+useDefaultLanguageBrowser = on
 
 

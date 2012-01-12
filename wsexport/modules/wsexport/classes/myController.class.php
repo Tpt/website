@@ -13,13 +13,10 @@
 * @subpackage wsexport
  */
 class myController extends jController {
-        protected $lang = '';
         protected $format = '';
 
         public function __construct($request) {
                 parent::__construct($request);
-                $lang = explode('_', $GLOBALS['gJConfig']->locale);
-                $this->lang = $lang[0];
                 $this->format = strtolower($this->param('format'));
         }
 
@@ -31,13 +28,19 @@ class myController extends jController {
                 }
         }
 
+        protected function _getLang() {
+                global $gJConfig;
+                $lang = explode('_', $gJConfig->locale);
+                return $lang[0];
+        }
+
         protected function _getTitle() {
                 return str_replace(' ', '_', urldecode($this->param('title')));
         }
 
         protected function _getHtmlResponse() {
                 $rep = $this->getResponse('html');
-                $rep->lang = $this->lang;
+                $rep->lang = $this->_getLang();
                 return $rep;
         }
 

@@ -17,8 +17,9 @@ class personCtrl extends myController {
          * search and list of authors
          */
         public function index() {
+                $lang = $this->_getLang();
                 $params = array();
-                $params['lang'] = $this->lang;
+                $params['lang'] = $lang;
                 $startsWith = $this->boolParam('startsWith', false);
                 jClasses::inc('PersonStorage');
                 foreach(PersonStorage::$SEARCH_KEYS as $key) {
@@ -67,14 +68,14 @@ class personCtrl extends myController {
                                 foreach($people as $person) {
                                         $updated = explode(' ', $person->updated);
                                         $rep->addUrl(jUrl::get('person:view', array('lang' => $person->lang, 'title' => $person->title)), $updated[0], 'weekly', '0.5');
-			        }
+                                }
                                 break;
                         case 'atom':
                                 $rep = $this->getResponse('xml');
                                 $rep->addHttpHeader('Content-Type', 'application/atom+xml;profile=opds-catalog;kind=navigation', true);
-		                $rep->contentTpl = 'index.person.atom';
+                                $rep->contentTpl = 'index.person.atom';
                                 $rep->content->assign('people', $people);
-                                $rep->content->assign('lang', $this->lang);
+                                $rep->content->assign('lang', $lang);
                                 $rep->content->assign('params', $this->request->params);
                                 $rep->content->assign('count', $count);
                                 $rep->content->assign('offset', $offset);
@@ -93,10 +94,10 @@ class personCtrl extends myController {
                                 $rep->addHeadContent('<meta name="totalResults" content="' . $count . '" />');
                                 $rep->addHeadContent('<meta name="startIndex" content="' . $offset . '" />');
                                 $rep->addHeadContent('<meta name="itemsPerPage" content="' . $itemPerPage . '" />');
-		                $rep->title = ''; //TODO
+                                $rep->title = ''; //TODO
                                 $tpl = new jTpl();
                                 $tpl->assign('people', $people);
-                                $tpl->assign('lang', $this->lang);
+                                $tpl->assign('lang', $lang);
                                 $tpl->assign('params', $this->request->params);
                                 $tpl->assign('count', $count);
                                 $tpl->assign('offset', $offset);
@@ -106,13 +107,14 @@ class personCtrl extends myController {
                         default:
                                 return $this->_error(404);
                 }
-		return $rep;
+                return $rep;
         }
 
         /**
          * informations on a person
          */
         public function view() {
+                $lang = $this->_getLang();
                 $title = $this->_getTitle();
                 $wayAsc = $this->boolParam('asc', true);
                 $itemPerPage = $this->intParam('itemPerPage', 20);
@@ -120,14 +122,14 @@ class personCtrl extends myController {
 
                 $personStorage = jClasses::create('PersonStorage');
                 try {
-                        $person = $personStorage->get($this->lang, $title);
-		} catch(HttpException $e) {
-        		$person = jClasses::create('PersonRecord');
+                        $person = $personStorage->get($lang, $title);
+                } catch(HttpException $e) {
+                        $person = jClasses::create('PersonRecord');
                         $person->name = $this->param('title');
                 }
 
                 $bookStorage = jClasses::create('BookStorage');
-                $results = $bookStorage->getMetadatasByPerson($this->lang, $person->name, $wayAsc, $itemPerPage, $offset);
+                $results = $bookStorage->getMetadatasByPerson($lang, $person->name, $wayAsc, $itemPerPage, $offset);
                 $count = $results[0];
                 $books = $results[1];
                 switch($this->format) {
@@ -136,7 +138,7 @@ class personCtrl extends myController {
                                 $rep->addHttpHeader('Content-Type', 'application/atom+xml;profile=opds-catalog;kind=acquisition', true);
                                 $rep->contentTpl = 'index.book.atom';
                                 $rep->content->assign('books', $books);
-                                $rep->content->assign('lang', $this->lang);
+                                $rep->content->assign('lang', $lang);
                                 $rep->content->assign('params', $this->request->params);
                                 $rep->content->assign('count', $count);
                                 $rep->content->assign('offset', $offset);
@@ -150,8 +152,8 @@ class personCtrl extends myController {
                         case 'html':
                         case '':
                                 $rep = $this->_getHtmlResponse();
-                                $rep->addLink(jUrl::get('person:view', array('lang' => $this->lang, 'title' => $title)), 'canonical');
-		                $rep->title = $person->name;
+                                $rep->addLink(jUrl::get('person:view', array('lang' => $lang, 'title' => $title)), 'canonical');
+                                $rep->title = $person->name;
 
                                 $rep->htmlTagAttributes['prefix'] = 'og: http://ogp.me/ns#';
                                 $rep->addHeadContent('<meta property="og:title" content="' . htmlspecialchars($person->name) . '" />');
@@ -165,19 +167,19 @@ class personCtrl extends myController {
                                 $rep->addLink('http://www.gnu.org/copyleft/fdl.html', 'licence', null, 'GNU FDL');
 
                                 $tpl = new jTpl();
-		                $tpl->assign('person', $person);
+                                $tpl->assign('person', $person);
                                 $tpl->assign('books', $books);
-                                $tpl->assign('lang', $this->lang);
+                                $tpl->assign('lang', $lang);
                                 $tpl->assign('params', $this->request->params);
                                 $tpl->assign('count', $count);
                                 $tpl->assign('offset', $offset);
                                 $tpl->assign('itemPerPage', $itemPerPage);
-        		        $rep->body->assign('MAIN', $tpl->fetch('view.person.html'));
+                                $rep->body->assign('MAIN', $tpl->fetch('view.person.html'));
                                 break;
                         default:
                                 return $this->_error(404);
                 }
-		return $rep;
+                return $rep;
         }
 
 }

@@ -17,8 +17,9 @@ class bookCtrl extends myController {
          * search and list of books
          */
         public function index() {
+                $lang = $this->_getLang();
                 $params = array();
-                $params['lang'] = $this->lang;
+                $params['lang'] = $lang;
                 $startsWith = $this->boolParam('startsWith', false);
                 jClasses::inc('BookStorage');
                 foreach(BookStorage::$SEARCH_KEYS as $key) {
@@ -67,14 +68,14 @@ class bookCtrl extends myController {
                                 foreach($books as $book) {
                                         $updated = explode(' ', $book->updated);
                                         $rep->addUrl(jUrl::get('book:view', array('lang' => $book->lang, 'title' => $book->title)), $updated[0], 'weekly', '0.5');
-			        }
+                                }
                                 break;
                         case 'atom':
                                 $rep = $this->getResponse('xml');
                                 $rep->addHttpHeader('Content-Type', 'application/atom+xml;profile=opds-catalog;kind=acquisition', true);
-		                $rep->contentTpl = 'index.book.atom';
+                                $rep->contentTpl = 'index.book.atom';
                                 $rep->content->assign('books', $books);
-                                $rep->content->assign('lang', $this->lang);
+                                $rep->content->assign('lang', $lang);
                                 $rep->content->assign('params', $this->request->params);
                                 $rep->content->assign('count', $count);
                                 $rep->content->assign('offset', $offset);
@@ -93,10 +94,10 @@ class bookCtrl extends myController {
                                 $rep->addHeadContent('<meta name="totalResults" content="' . $count . '" />');
                                 $rep->addHeadContent('<meta name="startIndex" content="' . $offset . '" />');
                                 $rep->addHeadContent('<meta name="itemsPerPage" content="' . $itemPerPage . '" />');
-		                $rep->title = ''; //TODO
+                                $rep->title = ''; //TODO
                                 $tpl = new jTpl();
                                 $tpl->assign('books', $books);
-                                $tpl->assign('lang', $this->lang);
+                                $tpl->assign('lang', $lang);
                                 $tpl->assign('params', $this->request->params);
                                 $tpl->assign('count', $count);
                                 $tpl->assign('offset', $offset);
@@ -106,32 +107,33 @@ class bookCtrl extends myController {
                         default:
                                 return $this->_error(404);
                 }
-		return $rep;
+                return $rep;
         }
 
         /**
          * informations on a book
          */
         public function view() {
+                $lang = $this->_getLang();
                 $title = $this->_getTitle();
                 $bookStorage = jClasses::create('BookStorage');
                 try {
-                        $book = $bookStorage->getMetadata($this->lang, $title);
-		} catch(HttpException $e) {
-        		return $this->_error(404);
+                        $book = $bookStorage->getMetadata($lang, $title);
+                } catch(HttpException $e) {
+                        return $this->_error(404);
                 }
                 switch($this->format) {
                         case 'atom':
                                 $rep = $this->getResponse('xml');
                                 $rep->addHttpHeader('Content-Type', 'application/atom+xml;type=entry;profile=opds-catalog', true);
-		                $rep->content = jZone::get('opdsEntry', array('main' => true, 'book' => $book));
+                                $rep->content = jZone::get('opdsEntry', array('main' => true, 'book' => $book));
                                 break;
                         case 'html':
                         case '':
                                 $rep = $this->_getHtmlResponse();
-                                $rep->addLink(jUrl::get('book:view', array('lang' => $this->lang, 'title' => $title, 'format' => 'atom')), 'alternate', 'application/atom+xml;type=entry;profile=opds-catalog', jLocale::get('wsexport.opds_catalog'));
-                                $rep->addLink(jUrl::get('book:view', array('lang' => $this->lang, 'title' => $title)), 'canonical');
-		                $rep->title = $book->name;
+                                $rep->addLink(jUrl::get('book:view', array('lang' => $lang, 'title' => $title, 'format' => 'atom')), 'alternate', 'application/atom+xml;type=entry;profile=opds-catalog', jLocale::get('wsexport.opds_catalog'));
+                                $rep->addLink(jUrl::get('book:view', array('lang' => $lang, 'title' => $title)), 'canonical');
+                                $rep->title = $book->name;
 
                                 $dublincore = $rep->getPlugin('dublincore');
                                 $dublincore->addMeta('DC.identifier', 'http://' . $book->lang . '.wikisource.org/wiki/' . $book->title, 'DCTERMS.URI');
@@ -162,27 +164,28 @@ class bookCtrl extends myController {
                                 $rep->addLink('http://www.gnu.org/copyleft/fdl.html', 'licence', null, 'GNU FDL');
 
                                 $tpl = new jTpl();
-		                $tpl->assign('book', $book);
-        		        $rep->body->assign('MAIN', $tpl->fetch('view.book.html'));
+                                $tpl->assign('book', $book);
+                                $rep->body->assign('MAIN', $tpl->fetch('view.book.html'));
                                 break;
                         default:
                                 return $this->_error(404);
                 }
-		return $rep;
+                return $rep;
         }
 
         /**
          * get the book
          */
         public function get() {
+                $lang = $this->_getLang();
                 global $gJConfig;
                 $title = $this->_getTitle();
                 $withPictures = $this->boolParam('withPictures', true);
                 if($gJConfig->useToolserverExport == 'true') {
                         $rep = $this->getResponse('redirectUrl');
-                        $rep->url = 'http://toolserver.org/~tpt/wsexport/book.php?lang='.$this->lang.'&page='.urlencode($title).'&format='.urlencode($this->format).'&withPictures='.$withPictures;
+                        $rep->url = 'http://toolserver.org/~tpt/wsexport/book.php?lang='.$lang.'&page='.urlencode($title).'&format='.urlencode($this->format).'&withPictures='.$withPictures;
                 } else {
-                $bookStorage = jClasses::create('BookStorage');
+                        $bookStorage = jClasses::create('BookStorage');
                         switch($this->format) {
                                 case 'epub':
                                         include($gJConfig->_modulesPathList['wsexport'].'/classes/wikisource-export/book/formats/Epub2Generator.php');
@@ -200,74 +203,75 @@ class bookCtrl extends myController {
                                         return $this->_error(404);
                         }
                         try {
-                                $book = $bookStorage->get($this->lang, $title, $withPictures);
+                                $book = $bookStorage->get($lang, $title, $withPictures);
                         } catch(HttpException $e) {
-                                return $this->_error($e->code);
+                                return $this->_error($e->getCode());
                         }
-                        $bookStorage->incrementDownload($this->lang, $title);
+                        $bookStorage->incrementDownload($lang, $title);
                         $rep = $this->getResponse('binary');
                         $rep->outputFileName = $title . '.' . $generator->getExtension();
                         $rep->mimeType = $generator->getMimeType();
                         $rep->content = $generator->create($book);
                 }
-		return $rep;
+                return $rep;
         }
 
         public function search() {
+                $lang = $this->_getLang();
                 $query = trim($this->param('q'));
                 $itemPerPage = $this->intParam('itemPerPage', 20);
                 $offset = $this->intParam('offset', 0);
                 $startsWith = $this->boolParam('startsWith', false);
                 $bookStorage = jClasses::create('BookStorage');
                 try {
-                        $book = $bookStorage->getMetadata($this->lang, str_replace(' ', '_', $query));
+                        $book = $bookStorage->getMetadata($lang, str_replace(' ', '_', $query));
                         $rep = $this->getResponse('redirect');
-		        $rep->action = 'book:view';
+                        $rep->action = 'book:view';
                         $rep->params = array('lang' => $book->lang, 'title' => $book->title);
-		        return $rep;
-		} catch(HttpException $e) {
+                        return $rep;
+                } catch(HttpException $e) {
                 }
                 if($startsWith)
-                        $results = $bookStorage->searchMetadatas($this->lang, $query . '%', $itemPerPage, $offset);
+                        $results = $bookStorage->searchMetadatas($lang, $query . '%', $itemPerPage, $offset);
                 else
-                        $results = $bookStorage->searchMetadatas($this->lang, '%' . $query . '%', $itemPerPage, $offset);
+                        $results = $bookStorage->searchMetadatas($lang, '%' . $query . '%', $itemPerPage, $offset);
                 $count = $results[0];
                 $books = $results[1];
                 switch($this->format) {
-		        case 'opensearchdescription':
-			        $rep = $this->getResponse('opensearchdescription');
-			        $rep->infos->shortName = jLocale::get('wsexport.site.short_name');
-			        $rep->infos->description = jLocale::get('wsexport.site.description');
-			        $rep->infos->tags = '';
-			        $rep->infos->contact = '';
-			        $rep->infos->longName = jLocale::get('wsexport.site.long_name');
-			        $rep->infos->imageType = '';
-			        $rep->infos->imageLink = '';
-			        $rep->infos->iconType = '';
-			        $rep->infos->iconLink = '';
-			        $rep->infos->exemple = 'Declaration';
-			        $rep->infos->developer = '';
-			        $rep->infos->attribution = '';
-			        $rep->infos->syndicationRight = 'open';
-			        $rep->infos->languages = array('*');
-			        $rep->addItem($rep->createItem('application/opensearchdescription+xml', jUrl::getFull('#', array('format' => 'opensearchdescription'), jUrl::XMLSTRING), 'self'));
-			        $rep->addItem($rep->createItem('application/x-suggestions+json', jUrl::getFull('#', array('format' => 'opensearchsuggestions', 'lang' => '{language}', 'q' => '{searchTerms}', 'limit' => '{count?}', 'offset' => '{startIndex?}'), jUrl::XMLSTRING), 'suggestions'));
-			        $rep->addItem($rep->createItem('application/atom+xml', jUrl::getFull('#', array('format' => 'atom', 'lang' => '{language}', 'q' => '{searchTerms}', 'limit' => '{count?}', 'offset' => '{startIndex?}'), jUrl::XMLSTRING), 'results'));
-			        $rep->addItem($rep->createItem('application/xhtml+xml', jUrl::getFull('#', array('q' => '{searchTerms}', 'lang' => '{language}', 'limit' => '{count?}', 'offset' => '{startIndex?}'), jUrl::XMLSTRING), 'results'));
+                        case 'opensearchdescription':
+                                $rep = $this->getResponse('opensearchdescription');
+                                $rep->infos->shortName = jLocale::get('wsexport.site.short_name');
+                                $rep->infos->description = jLocale::get('wsexport.site.description');
+                                $rep->infos->tags = '';
+                                $rep->infos->contact = '';
+                                $rep->infos->longName = jLocale::get('wsexport.site.long_name');
+                                $rep->infos->imageType = '';
+                                $rep->infos->imageLink = '';
+                                $rep->infos->iconType = '';
+                                $rep->infos->iconLink = '';
+                                $rep->infos->exemple = 'Declaration';
+                                $rep->infos->developer = '';
+                                $rep->infos->attribution = '';
+                                $rep->infos->syndicationRight = 'open';
+                                $rep->infos->languages = array('*');
+                                $rep->addItem($rep->createItem('application/opensearchdescription+xml', jUrl::getFull('#', array('format' => 'opensearchdescription'), jUrl::XMLSTRING), 'self'));
+                                $rep->addItem($rep->createItem('application/x-suggestions+json', jUrl::getFull('#', array('format' => 'opensearchsuggestions', 'lang' => '{language}', 'q' => '{searchTerms}', 'limit' => '{count?}', 'offset' => '{startIndex?}'), jUrl::XMLSTRING), 'suggestions'));
+                                $rep->addItem($rep->createItem('application/atom+xml', jUrl::getFull('#', array('format' => 'atom', 'lang' => '{language}', 'q' => '{searchTerms}', 'limit' => '{count?}', 'offset' => '{startIndex?}'), jUrl::XMLSTRING), 'results'));
+                                $rep->addItem($rep->createItem('application/xhtml+xml', jUrl::getFull('#', array('q' => '{searchTerms}', 'lang' => '{language}', 'limit' => '{count?}', 'offset' => '{startIndex?}'), jUrl::XMLSTRING), 'results'));
                                 break;
-		        case 'opensearchsuggestions':
-			        $rep = $this->getResponse('opensearchsuggestions');
+                        case 'opensearchsuggestions':
+                                $rep = $this->getResponse('opensearchsuggestions');
                                 $rep->query = $query;
-			        foreach($books as $book) {
-				        $rep->addItem($book->name, $book->name, jUrl::getFull('book:view', array('lang' => $book->lang, 'title' => $book->title)));
-			        }
+                                foreach($books as $book) {
+                                        $rep->addItem($book->name, $book->name, jUrl::getFull('book:view', array('lang' => $book->lang, 'title' => $book->title)));
+                                }
                                 break;
                         case 'atom':
                                 $rep = $this->getResponse('xml');
                                 $rep->addHttpHeader('Content-Type', 'application/atom+xml;profile=opds-catalog;kind=acquisition', true);
-		                $rep->contentTpl = 'index.book.atom';
+                                $rep->contentTpl = 'index.book.atom';
                                 $rep->content->assign('books', $books);
-                                $rep->content->assign('lang', $this->lang);
+                                $rep->content->assign('lang', $lang);
                                 $rep->content->assign('params', $this->request->params);
                                 $rep->content->assign('count', $count);
                                 $rep->content->assign('offset', $offset);
@@ -287,10 +291,10 @@ class bookCtrl extends myController {
                                 $rep->addHeadContent('<meta name="totalResults" content="' . $count . '" />');
                                 $rep->addHeadContent('<meta name="startIndex" content="' . $offset . '" />');
                                 $rep->addHeadContent('<meta name="itemsPerPage" content="' . $itemPerPage . '" />');
-		                $rep->title = ''; //TODO
+                                $rep->title = ''; //TODO
                                 $tpl = new jTpl();
                                 $tpl->assign('books', $books);
-                                $tpl->assign('lang', $this->lang);
+                                $tpl->assign('lang', $lang);
                                 $tpl->assign('params', $this->request->params);
                                 $tpl->assign('count', $count);
                                 $tpl->assign('offset', $offset);
@@ -301,27 +305,29 @@ class bookCtrl extends myController {
                         default:
                                 return $this->_error(404);
                 }
-		return $rep;
+                return $rep;
         }
 
         public function random() {
+                $lang = $this->_getLang();
                 $bookStorage = jClasses::create('BookStorage');
-                $title = $bookStorage->getRandomTitle($this->lang);
+                $title = $bookStorage->getRandomTitle($lang);
                 $rep = $this->getResponse('redirect');
-		$rep->action = 'book:view';
-                $rep->params = array('lang' => $this->lang, 'title' => $title);
-		return $rep;
+                $rep->action = 'book:view';
+                $rep->params = array('lang' => $lang, 'title' => $title);
+                return $rep;
         }
 
         public function updateAll() {
+                $lang = $this->_getLang();
                 $bookStorage = jClasses::create('BookStorage');
-                $book = $bookStorage->setMetadataFromCategory($this->lang, 'Catégorie:Bon_pour_export');
+                $book = $bookStorage->setMetadataFromCategory($lang, 'Catégorie:Bon_pour_export');
                 $personStorage = jClasses::create('PersonStorage');
-                $personStorage->refresh($this->lang);
+                $personStorage->refresh($lang);
                 jMessage::add('Mise à jour effectuée');
                 $rep = $this->getResponse('redirect');
                 $rep->action = 'book:index';
-                $rep->params = array('lang' => $this->lang, 'order' => 'updated', 'asc' => 'false');
-		return $rep;
+                $rep->params = array('lang' => $lang, 'order' => 'updated', 'asc' => 'false');
+                return $rep;
         }
 }

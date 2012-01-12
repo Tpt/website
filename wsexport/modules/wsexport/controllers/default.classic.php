@@ -12,24 +12,25 @@ class defaultCtrl extends myController {
 
         function index() {
                 $rep = $this->getResponse('redirect');
-		$rep->action = 'default:home';
-                $rep->params = array('lang' => $this->lang);
+                $rep->action = 'default:home';
+                $rep->params = array('lang' => $this->_getLang());
                 return $rep;
         }
 
         function home() {
+                $lang = $this->_getLang();
                 switch($this->format) {
                         case 'sitemap':
                                 $rep = $this->getResponse('sitemap');
                                 //$rep->addUrl(jUrl::get('#'), date('Y-m-d'));
-			        $rep->addSitemap(jUrl::get('book:index', array('lang' => $this->lang, 'format' => 'sitemap')), date('Y-m-d'));
-                                $rep->addSitemap(jUrl::get('person:index', array('lang' => $this->lang, 'format' => 'sitemap')), date('Y-m-d'));
+                                $rep->addSitemap(jUrl::get('book:index', array('lang' => $lang, 'format' => 'sitemap')), date('Y-m-d'));
+                                $rep->addSitemap(jUrl::get('person:index', array('lang' => $lang, 'format' => 'sitemap')), date('Y-m-d'));
                                 break;
                         case 'atom':
                                 $rep = $this->getResponse('xml');
                                 $rep->addHttpHeader('Content-Type', 'application/atom+xml;profile=opds-catalog;kind=navigation', true);
-		                $rep->contentTpl = 'index.default.atom';
-                                $rep->content->assign('lang', $this->lang);
+                                $rep->contentTpl = 'index.default.atom';
+                                $rep->content->assign('lang', $lang);
                                 $dt = new jDateTime();
                                 $dt->now();
                                 $now = $dt->toString(jDateTime::ISO8601_FORMAT);
@@ -39,23 +40,23 @@ class defaultCtrl extends myController {
                         case '':
                                 $rep = $this->_getHtmlResponse();
                                 $rep->action = 'home';
-                                $rep->addLink(jUrl::get('default:home', array('lang' => $this->lang, 'format' => 'atom')), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=navigation', jLocale::get('wsexport.opds_catalog'));
+                                $rep->addLink(jUrl::get('default:home', array('lang' => $lang, 'format' => 'atom')), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=navigation', jLocale::get('wsexport.opds_catalog'));
                                 $rep->htmlTagAttributes['prefix'] = 'og: http://ogp.me/ns#';
                                 $rep->addHeadContent('<meta property="og:title" content="' . jLocale::get('wsexport.site.long_name') . '" />');
                                 $rep->addHeadContent('<meta property="og:type" content="website" />');
                                 $rep->addHeadContent('<meta property="og:url" content="' . jUrl::getFull('#') . '" />');
                                 //$rep->addHeadContent('<meta property="og:image" content="" />');
-                                $rep->addHeadContent('<meta property="og:locale" content="' . $this->_getFullLang($this->lang) . '" />');
+                                $rep->addHeadContent('<meta property="og:locale" content="' . $this->_getFullLang($lang) . '" />');
                                 $rep->addHeadContent('<meta property="og:site_name" content="' . jLocale::get('wsexport.site.short_name') . '" />');
                                 $rep->addHeadContent('<meta property="og:description" content="' . jLocale::get('wsexport.site.description') . '" />');
                                 $tpl = new jTpl();
-                                $tpl->assign('lang', $this->lang);
-        		        $rep->body->assign('MAIN', $tpl->fetch('home.default.html'));
+                                $tpl->assign('lang', $lang);
+                                $rep->body->assign('MAIN', $tpl->fetch('home.default.html'));
                                 break;
                         default:
                                 return $this->_error(404);
                 }
-		return $rep;
+                return $rep;
         }
 
         function about() {
@@ -65,12 +66,12 @@ class defaultCtrl extends myController {
                                 $rep = $this->_getHtmlResponse();
                                 $rep->action = 'about';
                                 $tpl = new jTpl();
-                                $tpl->assign('lang', $this->lang);
-        		        $rep->body->assign('MAIN', $tpl->fetch('about.default.html'));
+                                $tpl->assign('lang', $this->_getLang());
+                                $rep->body->assign('MAIN', $tpl->fetch('about.default.html'));
                                 break;
                         default:
                                 return $this->_error(404);
                 }
-		return $rep;
+                return $rep;
         }
 }
