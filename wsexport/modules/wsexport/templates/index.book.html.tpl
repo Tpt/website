@@ -9,18 +9,18 @@
     {/if}
   </div>
   <div class="span8">
-    <h5><a itemprop="url" href="{jurl 'book:view', array('lang' => $book->lang, 'title' => $book->title)}">{$book->name|eschtml}{if $book->volume != ''}, {$book->volume|escxml}{/if}</a></h5>
+    <h5><a itemprop="url" href="{jurl 'book:view', array('lang' => $lang, 'format' => 'html', 'title' => $book->title)}">{$book->name|eschtml}{if $book->volume != ''}, {$book->volume|escxml}{/if}</a></h5>
     {if $book->author}
     <h6>
       {@wsexport.by@}
       <span itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">
-	<a  itemprop="url" href="{jurl 'person:view', array('lang' => $book->lang, 'title' => $book->author)}">{$book->author|eschtml}</a>
+	<a  itemprop="url" href="{jurl 'person:view', array('lang' => $lang, 'format' => 'html', 'title' => $book->author)}">{$book->author|eschtml}</a>
       </span>
     </h6>
     {/if}
   </div>
   <div class="span4">
-    <p><a href="{jurl 'book:get', array('lang' => $book->lang, 'format' => 'epub', 'title' => $book->title)}" class="btn download">{@wsexport.download@}</a></p>
+    <p><a href="{jurl 'book:get', array('lang' => $lang, 'format' => 'epub', 'title' => $book->title)}" class="btn download">{@wsexport.download@}</a></p>
     <p>{jlocale "wsexport.downloads", array($book->downloads)}</p>
   </div>
 </article>

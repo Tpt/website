@@ -1,40 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <suburls xmlns="http://jelix.org/ns/suburls/1.0">
     <url pathinfo="/" action="default:index">
+    </url>
+    <url pathinfo="/:lang.:format" action="default:home">
         <param name="lang" regexp="[a-z]{2}" />
+        <param name="format" type="string" />
     </url>
     <url pathinfo="/:lang" action="default:home">
         <param name="lang" regexp="[a-z]{2}" />
     </url>
-    <url pathinfo="/:lang/about" action="default:about">
+    <url pathinfo="/:lang/about.:format" action="default:about">
         <param name="lang" regexp="[a-z]{2}" />
+        <param name="format" type="string" />
     </url>
-    <url pathinfo="/:lang/search" action="book:search">
+    <url pathinfo="/:lang/search.:format" action="book:search">
         <param name="lang" regexp="[a-z]{2}" />
+        <param name="format" type="string" />
     </url>
-    <url pathinfo="/:lang/book" action="book:index">
+    <url pathinfo="/:lang/book.:format" action="book:index">
         <param name="lang" regexp="[a-z]{2}" />
+        <param name="format" type="string" />
     </url>
-    <url pathinfo="/:lang/book/random" action="book:index">
+    <url pathinfo="/:lang/book/random.:format" action="book:random">
         <param name="lang" regexp="[a-z]{2}" />
+        <param name="format" type="string" />
     </url>
     <url pathinfo="/:lang/book/updateAll" action="book:updateAll">
         <param name="lang" regexp="[a-z]{2}" />
-    </url>
-    <url pathinfo="/:lang/book/:title" action="book:view">
-        <param name="lang" regexp="[a-z]{2}" />
-        <param name="title" type="string" />
-    </url>
-    <url pathinfo="/:lang/book/:format/:title" action="book:get">
-        <param name="lang" regexp="[a-z]{2}" />
-        <param name="title" type="string" />
         <param name="format" type="string" />
     </url>
-    <url pathinfo="/:lang/person" action="person:index">
+    <url pathinfo="/:lang/book/:title.:format" action="book:view">
         <param name="lang" regexp="[a-z]{2}" />
+        <param name="format" type="string" />
+        <param name="title" type="string" />
     </url>
-    <url pathinfo="/:lang/person/:title" action="person:view">
+    <url pathinfo="/:lang/book/:format/:title.:format" action="book:get">
         <param name="lang" regexp="[a-z]{2}" />
+        <param name="format" type="string" />
+        <param name="title" type="string" />
+    </url>
+    <url pathinfo="/:lang/person.:format" action="person:index">
+        <param name="lang" regexp="[a-z]{2}" />
+        <param name="format" type="string" />
+    </url>
+    <url pathinfo="/:lang/person/:title.:format" action="person:view">
+        <param name="lang" regexp="[a-z]{2}" />
+        <param name="format" type="string" />
         <param name="title" type="string" />
     </url>
 </suburls>

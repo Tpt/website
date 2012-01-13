@@ -18,6 +18,9 @@ class myController extends jController {
         public function __construct($request) {
                 parent::__construct($request);
                 $this->format = strtolower($this->param('format'));
+                if($this->format == '') {
+                        $this->format = 'html';
+                }
         }
 
         protected function _error($id) {

@@ -9,7 +9,7 @@
     {/if}
   </div>
   <div class="span8">
-    <h5><a itemprop="url" href="{jurl 'person:view', array('lang' => $person->lang, 'title' => $person->title)}">{$person->name|eschtml}</a></h5>
+    <h5><a itemprop="url" href="{jurl 'person:view', array('lang' => $person->lang, 'format' => 'html', 'title' => $person->title)}">{$person->name|eschtml}</a></h5>
     {if $person->birthDate || $person->deathDate}<h6 class="date">({if is_numeric($person->birthDate)}<time itemprop="birthDate" datetime="{$person->birthDate}">{$person->birthDate}</time>{else}{$person->birthDate|eschtml}{/if} - {if is_numeric($person->deathDate)}<time itemprop="deathDate" datetime="{$person->deathDate}">{$person->deathDate}</time>{else}{$person->deathDate|eschtml}{/if})</h6>{/if}
   </div>
 </article>

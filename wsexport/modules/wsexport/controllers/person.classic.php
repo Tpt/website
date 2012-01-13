@@ -67,7 +67,7 @@ class personCtrl extends myController {
                                 $rep = $this->getResponse('sitemap');
                                 foreach($people as $person) {
                                         $updated = explode(' ', $person->updated);
-                                        $rep->addUrl(jUrl::get('person:view', array('lang' => $person->lang, 'title' => $person->title)), $updated[0], 'weekly', '0.5');
+                                        $rep->addUrl(jUrl::get('person:view', array('lang' => $person->lang, 'format' => 'html', 'title' => $person->title)), $updated[0], 'weekly', '0.5');
                                 }
                                 break;
                         case 'atom':
@@ -86,10 +86,9 @@ class personCtrl extends myController {
                                 $rep->content->assign('now', $now);
                                 break;
                         case 'html':
-                        case '':
                                 $rep = $this->_getHtmlResponse();
                                 $rep->noRobots = true;
-                                $rep->addLink(jUrl::get('person:index', array_merge($this->request->params, array('format' => 'atom'))), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=acquisition', jLocale::get('wsexport.opds_catalog'));
+                                $rep->addLink(jUrl::get('person:index', array_merge($this->request->params, array('format' => 'atom'))), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=navigation', jLocale::get('wsexport.opds_catalog'));
                                 $rep->headTagAttributes['profile'] .= ' http://a9.com/-/spec/opensearch/1.1/';
                                 $rep->addHeadContent('<meta name="totalResults" content="' . $count . '" />');
                                 $rep->addHeadContent('<meta name="startIndex" content="' . $offset . '" />');
@@ -150,14 +149,14 @@ class personCtrl extends myController {
                                 $rep->content->assign('now', $now);
                                 break;
                         case 'html':
-                        case '':
                                 $rep = $this->_getHtmlResponse();
-                                $rep->addLink(jUrl::get('person:view', array('lang' => $lang, 'title' => $title)), 'canonical');
+                                $rep->addLink(jUrl::get('person:view', array('lang' => $lang, 'format' => 'html', 'title' => $title)), 'canonical');
+                                $rep->addLink(jUrl::get('person:view', array('lang' => $lang, 'format' => 'atom', 'title' => $title)), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=acquisition', jLocale::get('wsexport.opds_catalog'));
                                 $rep->title = $person->name;
 
                                 $rep->htmlTagAttributes['prefix'] = 'og: http://ogp.me/ns#';
                                 $rep->addHeadContent('<meta property="og:title" content="' . htmlspecialchars($person->name) . '" />');
-                                $rep->addHeadContent('<meta property="og:url" content="' . jUrl::getFull('person:view', array('lang' => $person->lang, 'title' => $person->title), jUrl::XMLSTRING) . '" />');
+                                $rep->addHeadContent('<meta property="og:url" content="' . jUrl::getFull('person:view', array('lang' => $person->lang, 'format' => 'html', 'title' => $person->title), jUrl::XMLSTRING) . '" />');
                                 $rep->addHeadContent('<meta property="og:image" content="' . $person->imageUrl . '" />');
                                 $rep->addHeadContent('<meta property="og:locale" content="' . $this->_getFullLang($person->lang) . '" />');
                                 $rep->addHeadContent('<meta property="og:site_name" content="' . jLocale::get('wsexport.site.short_name') . '" />');

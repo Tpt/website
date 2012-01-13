@@ -67,7 +67,7 @@ class bookCtrl extends myController {
                                 $rep = $this->getResponse('sitemap');
                                 foreach($books as $book) {
                                         $updated = explode(' ', $book->updated);
-                                        $rep->addUrl(jUrl::get('book:view', array('lang' => $book->lang, 'title' => $book->title)), $updated[0], 'weekly', '0.5');
+                                        $rep->addUrl(jUrl::get('book:view', array('lang' => $book->lang, 'format' => 'html', 'title' => $book->title)), $updated[0], 'weekly', '0.5');
                                 }
                                 break;
                         case 'atom':
@@ -86,7 +86,6 @@ class bookCtrl extends myController {
                                 $rep->content->assign('now', $now);
                                 break;
                         case 'html':
-                        case '':
                                 $rep = $this->_getHtmlResponse();
                                 $rep->noRobots = true;
                                 $rep->addLink(jUrl::get('book:index', array_merge($this->request->params, array('format' => 'atom'))), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=acquisition', jLocale::get('wsexport.opds_catalog'));
@@ -129,10 +128,9 @@ class bookCtrl extends myController {
                                 $rep->content = jZone::get('opdsEntry', array('main' => true, 'book' => $book));
                                 break;
                         case 'html':
-                        case '':
                                 $rep = $this->_getHtmlResponse();
-                                $rep->addLink(jUrl::get('book:view', array('lang' => $lang, 'title' => $title, 'format' => 'atom')), 'alternate', 'application/atom+xml;type=entry;profile=opds-catalog', jLocale::get('wsexport.opds_catalog'));
-                                $rep->addLink(jUrl::get('book:view', array('lang' => $lang, 'title' => $title)), 'canonical');
+                                $rep->addLink(jUrl::get('book:view', array('lang' => $book->lang, 'format' => 'atom', 'title' => $title)), 'alternate', 'application/atom+xml;type=entry;profile=opds-catalog', jLocale::get('wsexport.opds_catalog'));
+                                $rep->addLink(jUrl::get('book:view', array('lang' => $book->lang, 'format' => 'html', 'title' => $title)), 'canonical');
                                 $rep->title = $book->name;
 
                                 $dublincore = $rep->getPlugin('dublincore');
@@ -151,7 +149,7 @@ class bookCtrl extends myController {
                                 $rep->headTagAttributes['prefix'] = 'book: http://ogp.me/ns/book#';
                                 $rep->addHeadContent('<meta property="og:title" content="' . htmlspecialchars($book->name) . '" />');
                                 $rep->addHeadContent('<meta property="og:type" content="book" />');
-                                $rep->addHeadContent('<meta property="og:url" content="' . jUrl::getFull('book:view', array('lang' => $book->lang, 'title' => $book->title), jUrl::XMLSTRING) . '" />');
+                                $rep->addHeadContent('<meta property="og:url" content="' . jUrl::getFull('book:view', array('lang' => $book->lang, 'format' => 'html', 'title' => $book->title), jUrl::XMLSTRING) . '" />');
                                 $rep->addHeadContent('<meta property="og:image" content="' . $book->coverUrl . '" />');
                                 $rep->addHeadContent('<meta property="og:locale" content="' . $this->_getFullLang($book->lang) . '" />');
                                 $rep->addHeadContent('<meta property="og:site_name" content="' . jLocale::get('wsexport.site.short_name') . '" />');
@@ -227,7 +225,7 @@ class bookCtrl extends myController {
                         $book = $bookStorage->getMetadata($lang, str_replace(' ', '_', $query));
                         $rep = $this->getResponse('redirect');
                         $rep->action = 'book:view';
-                        $rep->params = array('lang' => $book->lang, 'title' => $book->title);
+                        $rep->params = array('lang' => $book->lang, 'format' => $this->format, 'title' => $book->title);
                         return $rep;
                 } catch(HttpException $e) {
                 }
@@ -238,32 +236,11 @@ class bookCtrl extends myController {
                 $count = $results[0];
                 $books = $results[1];
                 switch($this->format) {
-                        case 'opensearchdescription':
-                                $rep = $this->getResponse('opensearchdescription');
-                                $rep->infos->shortName = jLocale::get('wsexport.site.short_name');
-                                $rep->infos->description = jLocale::get('wsexport.site.description');
-                                $rep->infos->tags = '';
-                                $rep->infos->contact = '';
-                                $rep->infos->longName = jLocale::get('wsexport.site.long_name');
-                                $rep->infos->imageType = '';
-                                $rep->infos->imageLink = '';
-                                $rep->infos->iconType = '';
-                                $rep->infos->iconLink = '';
-                                $rep->infos->exemple = 'Declaration';
-                                $rep->infos->developer = '';
-                                $rep->infos->attribution = '';
-                                $rep->infos->syndicationRight = 'open';
-                                $rep->infos->languages = array('*');
-                                $rep->addItem($rep->createItem('application/opensearchdescription+xml', jUrl::getFull('#', array('format' => 'opensearchdescription'), jUrl::XMLSTRING), 'self'));
-                                $rep->addItem($rep->createItem('application/x-suggestions+json', jUrl::getFull('#', array('format' => 'opensearchsuggestions', 'lang' => '{language}', 'q' => '{searchTerms}', 'limit' => '{count?}', 'offset' => '{startIndex?}'), jUrl::XMLSTRING), 'suggestions'));
-                                $rep->addItem($rep->createItem('application/atom+xml', jUrl::getFull('#', array('format' => 'atom', 'lang' => '{language}', 'q' => '{searchTerms}', 'limit' => '{count?}', 'offset' => '{startIndex?}'), jUrl::XMLSTRING), 'results'));
-                                $rep->addItem($rep->createItem('application/xhtml+xml', jUrl::getFull('#', array('q' => '{searchTerms}', 'lang' => '{language}', 'limit' => '{count?}', 'offset' => '{startIndex?}'), jUrl::XMLSTRING), 'results'));
-                                break;
                         case 'opensearchsuggestions':
                                 $rep = $this->getResponse('opensearchsuggestions');
                                 $rep->query = $query;
                                 foreach($books as $book) {
-                                        $rep->addItem($book->name, $book->name, jUrl::getFull('book:view', array('lang' => $book->lang, 'title' => $book->title)));
+                                        $rep->addItem($book->name, $book->name, jUrl::getFull('book:view', array('lang' => $book->lang, 'format' => 'html', 'title' => $book->title)));
                                 }
                                 break;
                         case 'atom':
@@ -283,7 +260,6 @@ class bookCtrl extends myController {
                                 $rep->content->assign('now', $now);
                                 break;
                         case 'html':
-                        case '':
                                 $rep = $this->_getHtmlResponse();
                                 $rep->noRobots = true;
                                 $rep->addLink(jUrl::get('book:index', array_merge($this->request->params, array('format' => 'atom'))), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=acquisition', jLocale::get('wsexport.opds_catalog'));
@@ -314,7 +290,7 @@ class bookCtrl extends myController {
                 $title = $bookStorage->getRandomTitle($lang);
                 $rep = $this->getResponse('redirect');
                 $rep->action = 'book:view';
-                $rep->params = array('lang' => $lang, 'title' => urlencode($title));
+                $rep->params = array('lang' => $lang, 'format' => $this->format, 'title' => urlencode($title));
                 return $rep;
         }
 
@@ -327,7 +303,7 @@ class bookCtrl extends myController {
                 jMessage::add('Mise à jour effectuée');
                 $rep = $this->getResponse('redirect');
                 $rep->action = 'book:index';
-                $rep->params = array('lang' => $lang, 'order' => 'updated', 'asc' => 'false');
+                $rep->params = array('lang' => $lang, 'format' => 'html', 'order' => 'updated', 'asc' => 'false');
                 return $rep;
         }
 }

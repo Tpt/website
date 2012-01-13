@@ -10,14 +10,38 @@ jClasses::inc('myController');
 
 class defaultCtrl extends myController {
 
-        function index() {
-                $rep = $this->getResponse('redirect');
-                $rep->action = 'default:home';
-                $rep->params = array('lang' => $this->_getLang());
+        public function index() {
+                switch($this->format) {
+                        case 'opensearchdescription':
+                                $rep = $this->getResponse('opensearchdescription');
+                                $rep->infos->shortName = jLocale::get('wsexport.site.short_name');
+                                $rep->infos->description = jLocale::get('wsexport.site.description');
+                                $rep->infos->tags = '';
+                                $rep->infos->contact = '';
+                                $rep->infos->longName = jLocale::get('wsexport.site.long_name');
+                                $rep->infos->imageType = '';
+                                $rep->infos->imageLink = '';
+                                $rep->infos->iconType = '';
+                                $rep->infos->iconLink = '';
+                                $rep->infos->exemple = 'Declaration';
+                                $rep->infos->developer = '';
+                                $rep->infos->attribution = '';
+                                $rep->infos->syndicationRight = 'open';
+                                $rep->infos->languages = array('*');
+                                $rep->addItem($rep->createItem('application/opensearchdescription+xml', jUrl::getFull('#', array('format' => 'opensearchdescription'), jUrl::XMLSTRING), 'self'));
+                                $rep->addItem($rep->createItem('application/x-suggestions+json', jUrl::getFull('#', array('format' => 'opensearchsuggestions', 'lang' => '{language}', 'q' => '{searchTerms}', 'limit' => '{count?}', 'offset' => '{startIndex?}'), jUrl::XMLSTRING), 'suggestions'));
+                                $rep->addItem($rep->createItem('application/atom+xml', jUrl::getFull('person:search', array('format' => 'atom', 'lang' => '{language}', 'q' => '{searchTerms}', 'limit' => '{count?}', 'offset' => '{startIndex?}'), jUrl::XMLSTRING), 'results'));
+                                $rep->addItem($rep->createItem('application/xhtml+xml', jUrl::getFull('person:search', array('format' => 'html', 'q' => '{searchTerms}', 'lang' => '{language}', 'limit' => '{count?}', 'offset' => '{startIndex?}'), jUrl::XMLSTRING), 'results'));
+                                break;
+                        default:
+                                $rep = $this->getResponse('redirect');
+                                $rep->action = 'default:home';
+                                $rep->params = array('lang' => $this->_getLang(), 'format' => $this->format);
+                }
                 return $rep;
         }
 
-        function home() {
+        public function home() {
                 $lang = $this->_getLang();
                 switch($this->format) {
                         case 'sitemap':
@@ -37,7 +61,6 @@ class defaultCtrl extends myController {
                                 $rep->content->assign('now', $now);
                                 break;
                         case 'html':
-                        case '':
                                 $rep = $this->_getHtmlResponse();
                                 $rep->action = 'home';
                                 $rep->addLink(jUrl::get('default:home', array('lang' => $lang, 'format' => 'atom')), 'alternate', 'application/atom+xml;profile=opds-catalog;kind=navigation', jLocale::get('wsexport.opds_catalog'));
@@ -59,10 +82,9 @@ class defaultCtrl extends myController {
                 return $rep;
         }
 
-        function about() {
+        public function about() {
                 switch($this->format) {
                         case 'html':
-                        case '':
                                 $rep = $this->_getHtmlResponse();
                                 $rep->action = 'about';
                                 $tpl = new jTpl();

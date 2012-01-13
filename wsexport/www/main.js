@@ -5,7 +5,6 @@ $(function() {
                                 url: wsexport.url.booksearch,
                                 dataType: "json",
                                 data: {
-                                        format: "opensearchsuggestions",
                                         limit: 10,
                                         startsWith: true,
                                         q: request.term
