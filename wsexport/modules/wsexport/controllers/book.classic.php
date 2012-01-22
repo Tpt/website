@@ -8,7 +8,11 @@
 */
 
 global $gJConfig;
-$basePath = $gJConfig->_modulesPathList['wsexport'].'/classes/wikisource-export';
+global $wsexportConfig;
+$wsexportConfig = array(
+        'basePath' => $gJConfig->_modulesPathList['wsexport'].'classes/wikisource-export',
+        'tempPath' => jApp::tempPath('wiki')
+);
 include_once $gJConfig->_modulesPathList['wsexport'].'/classes/wikisource-export/book/init.php';
 jClasses::inc('myController');
 
@@ -300,6 +304,7 @@ class bookCtrl extends myController {
                 $book = $bookStorage->setMetadataFromCategory($lang, 'Catégorie:Bon_pour_export');
                 $personStorage = jClasses::create('PersonStorage');
                 $personStorage->refresh($lang);
+                $bookStorage->updateTemp($lang);
                 jMessage::add('Mise à jour effectuée');
                 $rep = $this->getResponse('redirect');
                 $rep->action = 'book:index';

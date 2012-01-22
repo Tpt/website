@@ -300,5 +300,15 @@ class BookStorage {
                 else
                         return str_replace('-400px-', '-100px-', $coverUrl);
         }
+
+        public function updateTemp($lang) {
+                global $wsexportConfig;
+                if(!file_exists($wsexportConfig['tempPath']))
+                        mkdir($wsexportConfig['tempPath']);
+                print_r($wsexportConfig);
+                include_once $wsexportConfig['basePath'].'/book/Refresh.php';
+                $refresh = new Refresh();
+                $refresh->refresh($lang);
+        }
 }
 
