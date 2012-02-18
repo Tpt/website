@@ -3,13 +3,13 @@
         {if $person->birthDate || $person->deathDate}<h2 class="date">({if is_numeric($person->birthDate)}<time itemprop="birthDate" datetime="{$person->birthDate}">{$person->birthDate}</time>{else}{$person->birthDate|eschtml}{/if} - {if is_numeric($person->deathDate)}<time itemprop="deathDate" datetime="{$person->deathDate}">{$person->deathDate}</time>{else}{$person->deathDate|eschtml}{/if})</h2>{/if}
 	<hr/>
         {if $person->title}<div class="row">
-                <div class="span4">
+                <div class="span3">
                         {if $person->imageUrl != ''}<img itemprop="image" src="{$person->imageUrl}" alt="{$person->name|eschtml}" title="{$person->name|eschtml}" width="200" />{/if}
                 </div>
-                <div itemprop="description" class="span8"><h5>{@wsexport.about@}</h5>
+                <div itemprop="description" class="span6"><h5>{@wsexport.about@}</h5>
 		  {$person->description|eschtml}
 		</div>
-                <aside class="span4">
+                <aside class="span3">
                         <h5>{@wsexport.links@}</h5>
                         <ul>
                                 {if $person->title}<li><a href="http://{$person->lang}.wikisource.org/wiki/Auteur:{$person->title|eschtml}">Wikisource</a></li>{/if}

@@ -43,6 +43,10 @@
         <param name="lang" regexp="[a-z]{2}" />
         <param name="format" type="string" />
     </url>
+    <url pathinfo="/:lang/person/random.:format" action="person:random">
+        <param name="lang" regexp="[a-z]{2}" />
+        <param name="format" type="string" />
+    </url>
     <url pathinfo="/:lang/person/:title.:format" action="person:view">
         <param name="lang" regexp="[a-z]{2}" />
         <param name="format" type="string" />

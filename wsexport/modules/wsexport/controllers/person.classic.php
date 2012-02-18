@@ -7,9 +7,6 @@
 * @licence http://www.gnu.org/licenses/gpl.html GNU General Public Licence
 */
 
-global $gJConfig;
-$basePath = $gJConfig->_modulesPathList['wsexport'].'/classes/wikisource-export';
-include_once $gJConfig->_modulesPathList['wsexport'].'/classes/wikisource-export/book/init.php';
 jClasses::inc('myController');
 
 class personCtrl extends myController {
@@ -181,4 +178,13 @@ class personCtrl extends myController {
                 return $rep;
         }
 
+        public function random() {
+                $lang = $this->_getLang();
+                $personStorage = jClasses::create('PersonStorage');
+                $title = $personStorage->getRandomTitle($lang);
+                $rep = $this->getResponse('redirect');
+                $rep->action = 'person:view';
+                $rep->params = array('lang' => $lang, 'format' => $this->format, 'title' => urlencode($title));
+                return $rep;
+        }
 }

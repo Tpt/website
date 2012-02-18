@@ -20,5 +20,18 @@
                 <property name="lastrevid" datatype="integer" default="0" />
         </record>
         <factory>
+                <method type="php" name="random">
+                        <parameter name="lang" />
+                        <body><![CDATA[
+                                $sql = $this->_selectClause.$this->_fromClause.$this->_whereClause;
+                                $sql .= ($this->_whereClause == ''?' WHERE ':' AND ');
+                                $sql .= ' lang = '. $this->_prepareValue($lang,'string');
+                                $sql .= ' ORDER BY RAND() LIMIT 1';
+                                $rs = $this->_conn->query($sql);
+                                $rs->setFetchMode(8,$this->_DaoRecordClassName);
+                                $record = $rs->fetch();
+                                return $record;
+                        ]]></body>
+                </method>
         </factory>
 </dao>

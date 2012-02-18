@@ -65,6 +65,17 @@ class personStorage {
                 return array($count, $people);
         }
 
+
+        /**
+         * get the title of a person page select by random
+         * @param $lang string the language code
+         * @return string
+         */
+        public function getRandomTitle($lang) {
+                $personDao = $this->factory->random($lang);
+                return $personDao->title;
+        }
+
         /**
          * add metadata of the person to the database
          * @param $lang the lang of the wikisource

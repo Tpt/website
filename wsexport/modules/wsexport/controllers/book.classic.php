@@ -7,13 +7,6 @@
 * @licence http://www.gnu.org/licenses/gpl.html GNU General Public Licence
 */
 
-global $gJConfig;
-global $wsexportConfig;
-$wsexportConfig = array(
-        'basePath' => $gJConfig->_modulesPathList['wsexport'].'classes/wikisource-export',
-        'tempPath' => jApp::tempPath('wiki')
-);
-include_once $gJConfig->_modulesPathList['wsexport'].'/classes/wikisource-export/book/init.php';
 jClasses::inc('myController');
 
 class bookCtrl extends myController {

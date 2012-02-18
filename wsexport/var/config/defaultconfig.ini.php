@@ -3,6 +3,7 @@
 ;this file doesn't list all possible properties. See lib/jelix/core/defaultconfig.ini.php for that
 
 useToolserverExport=false
+languages=fr
 
 startModule=wsexport
 startAction="default:index"

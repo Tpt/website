@@ -2,10 +2,10 @@
         <h1><span itemprop="name">{$book->name|eschtml}</span>{if $book->volume != ''}, {$book->volume|escxml}{/if}</h1>
         {if $book->author}<h2>{@wsexport.by@} <span itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person"><a itemprop="url" href="{jurl 'person:view', array('lang' => $book->lang, 'format' => 'html', 'title' => $book->author)}">{$book->author|eschtml}</a></span></h2>{/if}
         <div class="row">
-                <div class="span4">
+                <div class="span3">
                         {if $book->coverUrl != ''}<img itemprop="image" src="{$book->coverUrl}" alt="{@wsexport.cover@}" title="{@wsexport.cover@}" width="200" class="cover"/>{/if}
                 </div>
-                <div class="span8">
+                <div class="span6">
                         <table id="info">
                           <caption><h5>{@wsexport.description@}</h5></caption>
 			  <tbody>
@@ -40,7 +40,7 @@
 				</tbody>
                         </table>
                 </div>
-                <aside class="span4">
+                <aside class="span3">
                         <h5>{@wsexport.download@}</h5>
                         <ul>
                                 <li><a href="{jurl 'book:get', array('lang' => $book->lang, 'format' => 'epub', 'title' => $book->title)}">EPUB</a></li>
