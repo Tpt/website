@@ -22,6 +22,8 @@ class htmlResponse extends jResponseHtml5 {
 
         public $lang = '';
 
+        public $languages = array();
+
         function __construct() {
                 parent::__construct();
                 $this->headTagAttributes['profile'] = '';
@@ -35,14 +37,9 @@ class htmlResponse extends jResponseHtml5 {
                 $this->addLink(jUrl::get('wsexport~default:home', array('lang' => $this->lang, 'format' => 'html')), 'start', '', jLocale::get('wsexport~wsexport.mainpage'));
                 $this->addLink(jUrl::get('wsexport~default:index', array('format' => 'opensearchdescription')), 'search', 'application/opensearchdescription+xml', jLocale::get('wsexport.search'));
                 $this->body->assignIfNone('MAIN', '<p>no content</p>');
-                $this->body->assignIfNone('languages', $this->getLanguages());
+                $this->body->assignIfNone('languages', $this->languages);
                 $this->body->assignIfNone('action', $this->action);
                 $this->body->assignIfNone('lang', $this->lang);
-        }
-
-        protected function getLanguages() {
-                global $gJConfig;
-                return explode(',', $gJConfig->languages);
         }
 }
 

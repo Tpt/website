@@ -51,14 +51,7 @@ class defaultCtrl extends myController {
                                 $rep->addSitemap(jUrl::get('person:index', array('lang' => $lang, 'format' => 'sitemap')), date('Y-m-d'));
                                 break;
                         case 'atom':
-                                $rep = $this->getResponse('xml');
-                                $rep->addHttpHeader('Content-Type', 'application/atom+xml;profile=opds-catalog;kind=navigation', true);
-                                $rep->contentTpl = 'index.default.atom';
-                                $rep->content->assign('lang', $lang);
-                                $dt = new jDateTime();
-                                $dt->now();
-                                $now = $dt->toString(jDateTime::ISO8601_FORMAT);
-                                $rep->content->assign('now', $now);
+                                $rep = $this->_getAtomResponse('profile=opds-catalog;kind=navigation', 'home.default.atom', jLocale::get('wsexport.mainpage'));
                                 break;
                         case 'html':
                                 $rep = $this->_getHtmlResponse();
