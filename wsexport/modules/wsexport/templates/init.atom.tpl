@@ -1,5 +1,5 @@
 <feed xml:lang="{$lang}" xmlns="http://www.w3.org/2005/Atom" xmlns:opds="http://opds-spec.org/2010/catalog" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:app="http://www.w3.org/2007/app" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:thr="http://purl.org/syndication/thread/1.0">
-        <id xsi:type="dcterms:URI">{jfullurl2 '#', $params}</id>
+        <id xsi:type="dcterms:URI">{jfullurl '#', $params}</id>
         <title>{$title|escxml}</title>
         <updated>{$now}</updated>
         <icon></icon>

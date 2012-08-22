@@ -10,13 +10,14 @@
     var wsexport = {
         url: {
             booksearch: "{/literal}{jurl 'book:search', array('lang' => $lang, 'format' => 'opensearchsuggestions')}{literal}"
-        }
+        },
+		lang: "{/literal}{$lang}{literal}"
     };
 // ]]>
 </script>
 {/literal}
 <div role="document">
-    <header class="navbar navbar-fixed-top" role="banner">
+    <header class="navbar navbar-fixed-top navbar-inverse" role="banner">
         <div class="navbar-inner">
             <div class="container-fluid">
                 <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -29,8 +30,8 @@
                         <li {if $action == 'home'}class="active"{/if}><a href="{jurl 'default:home', array('lang' => $lang, 'format' => 'html')}" rel="home">{@wsexport.home@}</a></li>
                         <li {if $action == 'about'}class="active"{/if}><a href="{jurl 'default:about', array('lang' => $lang, 'format' => 'html')}">{@wsexport.about@}</a></li>
                     </ul>
+                    <form action="{jurl 'wsexport~book:search', array('lang' => $lang, 'format' => 'html')}" method="GET" id="quick-search" role="search" class="navbar-search pull-right"><input type="search" name="q" id="search-box" placeholder="{@wsexport.search@}" class="search-query" /></form>
                 </div>
-                <form action="{jurl 'wsexport~book:search', array('lang' => $lang, 'format' => 'html')}" method="GET" id="quick-search" role="search" class="navbar-search pull-right"><input type="search" name="q" id="search-box" placeholder="{@wsexport.search@}" class="search-query" /></form>
             </div>
         </div>
     </header>

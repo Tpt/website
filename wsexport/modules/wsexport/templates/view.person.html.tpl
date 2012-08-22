@@ -6,9 +6,9 @@
                 <div class="span3">
                         {if $person->imageUrl != ''}<img itemprop="image" src="{$person->imageUrl}" alt="{$person->name|eschtml}" title="{$person->name|eschtml}" width="200" />{/if}
                 </div>
-                <div itemprop="description" class="span6"><h5>{@wsexport.about@}</h5>
-		  {$person->description|eschtml}
-		</div>
+                <div class="span6"><h5>{@wsexport.about@}</h5>
+		                <p itemprop="description">{$person->description|eschtml}</p>
+                </div>
                 <aside class="span3">
                         <h5>{@wsexport.links@}</h5>
                         <ul>

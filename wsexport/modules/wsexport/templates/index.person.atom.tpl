@@ -15,7 +15,7 @@
                 <link type="application/atom+xml;profile=opds-catalog;kind=acquisition" rel="subsection" href="{jurl 'person:view', array('lang' => $person->lang, 'format' => 'atom', 'title' => $person->title)}" />
                 <link type="application/xhtml+xml" rel="alternate" href="{jurl 'person:view', array('lang' => $person->lang, 'format' => 'html', 'title' => $person->title)}" />
                 <updated>{$now}</updated>
-                <id xsi:type="dcterms:URI">{jfullurl2 'person:view', array('lang' => $person->lang, 'format' => 'atom', 'title' => $person->title)}</id>
+                <id xsi:type="dcterms:URI">{jfullurl 'person:view', array('lang' => $person->lang, 'format' => 'atom', 'title' => $person->title)}</id>
                 {if $person->imageUrl != ''}<link rel="http://opds-spec.org/image/thumbnail" href="{$person->imageUrl}" type="{$person->imageType}" />{/if}
         </entry>
         {/foreach}
