@@ -204,7 +204,9 @@ class BookStorage {
          */
         protected function getApi($lang, $title, $withPictures = true) {
                 $api = new Api($lang);
-      	        $provider = new BookProvider($api, $withPictures);
+                $options = array();
+                $options['images'] = $withPictures;
+                $provider = new BookProvider($api, $options);
                 return $provider->get(str_replace('%2F', '/', $title));
         }
 
